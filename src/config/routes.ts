@@ -10,6 +10,6 @@ else if (!baseURL.startsWith("http")) {
 
 export const urlPaths = {
   login: "/",
-  inventory: "/inventory.html",  
+  inventory: "/inventory.html",
   cart: "/cart.html",
 }
