@@ -1,4 +1,24 @@
 {
+  "name": "clover-automation-project",
+  "version": "1.0.0",
+  "description": "Playwright automation tests for the Swag Labs demo shop website",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ItayHakim/clover-automation-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ItayHakim/clover-automation-project/issues"
+  },
+  "homepage": "https://github.com/ItayHakim/clover-automation-project#readme",
   "dependencies": {
     "playwright": "^1.65.1"
   },
