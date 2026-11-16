@@ -39,6 +39,10 @@ export class InventoryPage {
     await this.getProduct(name).locator(inventorySelectors.productName).click();
   }
 
+  async addToCart(name: string) {
+    await this.getProduct(name).locator(inventorySelectors.addToCartButton).click();
+  }
+
   async sortProducts(sortOption: ProductSortOptionType) {
     await this.sortDropdown.selectOption(sortOption);
   }

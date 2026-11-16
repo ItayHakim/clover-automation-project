@@ -5,4 +5,5 @@ export const cartSelectors = {
   productPrice: '[data-test="inventory-item-price"]',
   productQuantity: '[data-test="item-quantity"]',
   continueShoppingButton: '[data-test="continue-shopping"]',
+  removeButton: '[data-test^="remove-"]',
 };

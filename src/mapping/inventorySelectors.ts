@@ -8,6 +8,7 @@ export const inventorySelectors = {
   productPrice: '[data-test="inventory-item-price"]',
   productImage: "img",
   sortDropdown: '[data-test="product-sort-container"]',
+  addToCartButton: '[data-test^="add-to-cart-"]',
   menuButton: navigationSelectors.menuButton,
   logoutLink: "#logout_sidebar_link"
 };

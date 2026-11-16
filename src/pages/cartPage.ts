@@ -15,4 +15,12 @@ export class CartPage {
   async continueShopping() {
     await this.continueShoppingButton.click();
   }
+
+  getProduct(name: string) {
+    return this.cartItems.filter({ has: this.page.getByText(name, { exact: true }) });
+  }
+
+  async removeProduct(name: string) {
+    await this.getProduct(name).locator(cartSelectors.removeButton).click();
+  }
 }
