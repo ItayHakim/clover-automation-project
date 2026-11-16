@@ -8,8 +8,8 @@ export class ProductDetailsPage {
 
   constructor(readonly page: Page) {
     const productDetails = page.locator(productDetailsSelectors.productDetails);
-    this.productName = productDetails.locator(productDetailsSelectors.productName);
-    this.productDescription = productDetails.locator(productDetailsSelectors.productDescription);
-    this.productPrice = productDetails.locator(productDetailsSelectors.productPrice);
+    this.productName = productDetails.getByTestId(productDetailsSelectors.productName);
+    this.productDescription = productDetails.getByTestId(productDetailsSelectors.productDescription);
+    this.productPrice = productDetails.getByTestId(productDetailsSelectors.productPrice);
   }
 }

@@ -3,7 +3,8 @@ import { basePage as test } from "../fixture/basePage";
 import { productSortOptions } from "../mapping/inventorySelectors";
 import { productCount, productSortCases, productsUsername, productToOpen } from "../testdata/productsData";
 import { assertSuccessfulLogin } from "../utils/loginUtils";
-import { assertProductCatalog, assertProductDetails, assertProductsSorted } from "../utils/productsUtils";
+import { assertProductDetails } from "../utils/productDetailsUtils";
+import { assertProductCatalog, assertProductsSorted } from "../utils/productsUtils";
 
 test.describe("Products Page Tests", () => {
     test.use({ pagePath: urlPaths.inventory, sessionUsername: productsUsername });

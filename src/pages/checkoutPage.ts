@@ -1,6 +1,7 @@
 import type { Locator, Page } from "@playwright/test";
 import { cartSelectors } from "../mapping/cartSelectors";
 import { checkoutSelectors } from "../mapping/checkoutSelectors";
+import { messagesSelectors } from "../mapping/messagesSelectors";
 import type { CheckoutCustomerType } from "../models/checkoutTypes";
 
 export class CheckoutPage {
@@ -19,19 +20,19 @@ export class CheckoutPage {
   readonly confirmationMessage: Locator;
 
   constructor(readonly page: Page) {
-    this.pageTitle = page.locator(checkoutSelectors.pageTitle);
-    this.firstNameInput = page.locator(checkoutSelectors.firstNameInput);
-    this.lastNameInput = page.locator(checkoutSelectors.lastNameInput);
-    this.postalCodeInput = page.locator(checkoutSelectors.postalCodeInput);
-    this.continueButton = page.locator(checkoutSelectors.continueButton);
-    this.cancelButton = page.locator(checkoutSelectors.cancelButton);
-    this.errorMessage = page.locator(checkoutSelectors.errorMessage);
-    this.orderItems = page.locator(cartSelectors.cartItems);
-    this.subtotal = page.locator(checkoutSelectors.subtotal);
-    this.tax = page.locator(checkoutSelectors.tax);
-    this.total = page.locator(checkoutSelectors.total);
-    this.finishButton = page.locator(checkoutSelectors.finishButton);
-    this.confirmationMessage = page.locator(checkoutSelectors.confirmationMessage);
+    this.pageTitle = page.getByTestId(checkoutSelectors.pageTitle);
+    this.firstNameInput = page.getByTestId(checkoutSelectors.firstNameInput);
+    this.lastNameInput = page.getByTestId(checkoutSelectors.lastNameInput);
+    this.postalCodeInput = page.getByTestId(checkoutSelectors.postalCodeInput);
+    this.continueButton = page.getByTestId(checkoutSelectors.continueButton);
+    this.cancelButton = page.getByTestId(checkoutSelectors.cancelButton);
+    this.errorMessage = page.getByTestId(messagesSelectors.errorMessage);
+    this.orderItems = page.getByTestId(cartSelectors.cartItems);
+    this.subtotal = page.getByTestId(checkoutSelectors.subtotal);
+    this.tax = page.getByTestId(checkoutSelectors.tax);
+    this.total = page.getByTestId(checkoutSelectors.total);
+    this.finishButton = page.getByTestId(checkoutSelectors.finishButton);
+    this.confirmationMessage = page.getByTestId(checkoutSelectors.confirmationMessage);
   }
 
   async submitInformation(customerDetails: CheckoutCustomerType) {

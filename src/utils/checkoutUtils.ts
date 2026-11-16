@@ -4,6 +4,7 @@ import { urlPaths } from "../config/routes";
 import type { CartProductType } from "../models/cartTypes";
 import { CheckoutPage } from "../pages/checkoutPage";
 import { assertCartItems } from "./cartUtils";
+import { formatPrice } from "./priceUtils";
 
 export async function assertCheckoutInformation(checkoutPage: CheckoutPage) {
     await expect(checkoutPage.page).toHaveURL(urlPaths.checkoutInformation);
@@ -29,9 +30,9 @@ export function calculateCheckoutTotals(products: CartProductType[], taxRate: nu
     const totalCents = subtotalCents + taxCents;
 
     return {
-        subtotal: (subtotalCents / 100).toFixed(2),
-        tax: (taxCents / 100).toFixed(2),
-        total: (totalCents / 100).toFixed(2),
+        subtotal: formatPrice(subtotalCents / 100),
+        tax: formatPrice(taxCents / 100),
+        total: formatPrice(totalCents / 100),
     };
 }
 
@@ -46,9 +47,9 @@ export async function assertCheckoutOverview(
 
     const expectedTotals = calculateCheckoutTotals(expectedProducts, taxRate);
 
-    await expect(checkoutPage.subtotal).toHaveText(`Item total: $${expectedTotals.subtotal}`);
-    await expect(checkoutPage.tax).toHaveText(`Tax: $${expectedTotals.tax}`);
-    await expect(checkoutPage.total).toHaveText(`Total: $${expectedTotals.total}`);
+    await expect(checkoutPage.subtotal).toHaveText(`Item total: ${expectedTotals.subtotal}`);
+    await expect(checkoutPage.tax).toHaveText(`Tax: ${expectedTotals.tax}`);
+    await expect(checkoutPage.total).toHaveText(`Total: ${expectedTotals.total}`);
 }
 
 export async function assertSuccessfulCheckout(checkoutPage: CheckoutPage, confirmationMessage: string) {

@@ -1,5 +1,7 @@
 export const navigationSelectors = {
-  cartLink: '[data-test="shopping-cart-link"]',
+  pageTitle: "title",
+  cartLink: "shopping-cart-link",
+  cartBadge: "shopping-cart-badge",
   menuButton: "#react-burger-menu-btn",
-  allItemsLink: "#inventory_sidebar_link",
+  allItemsLink: "inventory-sidebar-link",
 };

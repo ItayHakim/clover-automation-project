@@ -1,14 +1,15 @@
 import { usernames } from "../config/users";
 import type { CartProductType } from "../models/cartTypes";
 import type { CheckoutCustomerType, RejectedCheckoutCaseType } from "../models/checkoutTypes";
+import { backpackProduct, bikeLightProduct } from "./productsData";
 
 export const checkoutUsername = usernames.standard;
 export const checkoutTaxRate = 0.08;
 export const orderConfirmationMessage = "Thank you for your order!";
 
 export const checkoutProducts: CartProductType[] = [
-  { id: 4, name: "Sauce Labs Backpack", price: 29.99, quantity: 1 },
-  { id: 0, name: "Sauce Labs Bike Light", price: 9.99, quantity: 1 },
+  backpackProduct,
+  bikeLightProduct,
 ];
 
 export const customerDetails: CheckoutCustomerType = {

@@ -1,10 +1,13 @@
 import { usernames } from "../config/users";
 import { productSortOptions } from "../mapping/inventorySelectors";
+import type { CartProductType } from "../models/cartTypes";
 import type { ProductSortCaseType } from "../models/productTypes";
 
 export const productsUsername = usernames.standard;
 export const productCount = 6;
-export const productToOpen = { id: 4, name: "Sauce Labs Backpack" };
+export const backpackProduct: CartProductType = { id: 4, name: "Sauce Labs Backpack", price: 29.99, quantity: 1 };
+export const bikeLightProduct: CartProductType = { id: 0, name: "Sauce Labs Bike Light", price: 9.99, quantity: 1 };
+export const productToOpen = backpackProduct;
 
 export const productSortCases: ProductSortCaseType[] = [
   {

@@ -1,14 +1,15 @@
+import { navigationSelectors } from "./navigationSelectors";
+
 export const checkoutSelectors = {
-  pageTitle: '[data-test="title"]',
-  firstNameInput: '[data-test="firstName"]',
-  lastNameInput: '[data-test="lastName"]',
-  postalCodeInput: '[data-test="postalCode"]',
-  continueButton: '[data-test="continue"]',
-  cancelButton: '[data-test="cancel"]',
-  errorMessage: '[data-test="error"]',
-  subtotal: '[data-test="subtotal-label"]',
-  tax: '[data-test="tax-label"]',
-  total: '[data-test="total-label"]',
-  finishButton: '[data-test="finish"]',
-  confirmationMessage: '[data-test="complete-header"]',
+  pageTitle: navigationSelectors.pageTitle,
+  firstNameInput: "firstName",
+  lastNameInput: "lastName",
+  postalCodeInput: "postalCode",
+  continueButton: "continue",
+  cancelButton: "cancel",
+  subtotal: "subtotal-label",
+  tax: "tax-label",
+  total: "total-label",
+  finishButton: "finish",
+  confirmationMessage: "complete-header",
 };

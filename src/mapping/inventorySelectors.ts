@@ -1,15 +1,15 @@
 import { navigationSelectors } from "./navigationSelectors";
 
 export const inventorySelectors = {
-  pageTitle: '[data-test="title"]',
-  productCards: '[data-test="inventory-item"]',
-  productName: '[data-test="inventory-item-name"]',
-  productDescription: '[data-test="inventory-item-desc"]',
-  productPrice: '[data-test="inventory-item-price"]',
+  pageTitle: navigationSelectors.pageTitle,
+  productItem: "inventory-item",
+  productName: "inventory-item-name",
+  productDescription: "inventory-item-desc",
+  productPrice: "inventory-item-price",
   productImage: "img",
-  sortDropdown: '[data-test="product-sort-container"]',
-  menuButton: navigationSelectors.menuButton,
-  logoutLink: "#logout_sidebar_link"
+  sortDropdown: "product-sort-container",
+  addToCartButton: /^add-to-cart-/,
+  logoutLink: "logout-sidebar-link",
 };
 
 export const productSortOptions = {

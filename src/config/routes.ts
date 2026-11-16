@@ -15,3 +15,7 @@ export const urlPaths = {
   checkoutOverview: "/checkout-step-two.html",
   checkoutComplete: "/checkout-complete.html",
 }
+
+export function getProductDetailsPath(productId: number) {
+  return `${urlPaths.productDetails}?id=${productId}`;
+}

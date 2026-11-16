@@ -2,12 +2,10 @@ import { urlPaths } from "../config/routes";
 import { basePage as test } from "../fixture/basePage";
 import { navigationProductPath, navigationUsername, protectedRouteCases } from "../testdata/navigationData";
 import { productToOpen } from "../testdata/productsData";
+import { assertCartPage } from "../utils/cartUtils";
 import { assertInventoryPage } from "../utils/inventoryUtils";
-import {
-    assertCartPage,
-    assertProductDetailsPage,
-    assertProtectedRouteRedirect,
-} from "../utils/navigationUtils";
+import { assertProtectedRouteRedirect } from "../utils/navigationUtils";
+import { assertProductDetailsPage } from "../utils/productDetailsUtils";
 
 test.describe("Navigation Page Tests", () => {
     test.describe("Signed-in navigation", () => {
