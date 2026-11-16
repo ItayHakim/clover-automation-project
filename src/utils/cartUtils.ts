@@ -5,6 +5,7 @@ import type { CartProductType } from "../models/cartTypes";
 import { CartPage } from "../pages/cartPage";
 import { InventoryPage } from "../pages/inventoryPage";
 import { NavigationPage } from "../pages/navigationPage";
+import { formatPrice, parsePrice } from "./priceUtils";
 
 export async function addProductsToCart(
     inventoryPage: InventoryPage,
@@ -17,7 +18,7 @@ export async function addProductsToCart(
         expectedProducts.push({
             ...product,
             name: productDetails.name,
-            price: Number(productDetails.price.replace("$", "")),
+            price: parsePrice(productDetails.price),
         });
         await inventoryPage.addToCart(product.name);
     }
@@ -45,7 +46,7 @@ export async function assertCartItems(cartItems: Locator, expectedProducts: Cart
         await expect(name).toBeVisible();
         await expect(name).toHaveText(expectedProduct.name);
         await expect(price).toBeVisible();
-        await expect(price).toHaveText(`$${expectedProduct.price.toFixed(2)}`);
+        await expect(price).toHaveText(formatPrice(expectedProduct.price));
         await expect(quantity).toBeVisible();
         await expect(quantity).toHaveText(String(expectedProduct.quantity));
     }

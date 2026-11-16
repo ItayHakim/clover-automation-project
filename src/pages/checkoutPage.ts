@@ -1,6 +1,7 @@
 import type { Locator, Page } from "@playwright/test";
 import { cartSelectors } from "../mapping/cartSelectors";
 import { checkoutSelectors } from "../mapping/checkoutSelectors";
+import { messagesSelectors } from "../mapping/messagesSelectors";
 import type { CheckoutCustomerType } from "../models/checkoutTypes";
 
 export class CheckoutPage {
@@ -25,7 +26,7 @@ export class CheckoutPage {
     this.postalCodeInput = page.getByTestId(checkoutSelectors.postalCodeInput);
     this.continueButton = page.getByTestId(checkoutSelectors.continueButton);
     this.cancelButton = page.getByTestId(checkoutSelectors.cancelButton);
-    this.errorMessage = page.getByTestId(checkoutSelectors.errorMessage);
+    this.errorMessage = page.getByTestId(messagesSelectors.errorMessage);
     this.orderItems = page.getByTestId(cartSelectors.cartItems);
     this.subtotal = page.getByTestId(checkoutSelectors.subtotal);
     this.tax = page.getByTestId(checkoutSelectors.tax);

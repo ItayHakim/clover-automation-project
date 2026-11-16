@@ -1,11 +1,12 @@
+import { navigationSelectors } from "./navigationSelectors";
+
 export const checkoutSelectors = {
-  pageTitle: "title",
+  pageTitle: navigationSelectors.pageTitle,
   firstNameInput: "firstName",
   lastNameInput: "lastName",
   postalCodeInput: "postalCode",
   continueButton: "continue",
   cancelButton: "cancel",
-  errorMessage: "error",
   subtotal: "subtotal-label",
   tax: "tax-label",
   total: "total-label",

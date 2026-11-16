@@ -175,6 +175,7 @@ clover-automation-project/
 |   |   |-- checkoutSelectors.ts
 |   |   |-- inventorySelectors.ts
 |   |   |-- loginSelectors.ts
+|   |   |-- messagesSelectors.ts
 |   |   |-- navigationSelectors.ts
 |   |   `-- productDetailsSelectors.ts
 |   |-- models/
@@ -200,6 +201,7 @@ clover-automation-project/
 |   |-- testdata/
 |   |   |-- cartData.ts
 |   |   |-- checkoutData.ts
+|   |   |-- errorMessages.ts
 |   |   |-- loginData.ts
 |   |   |-- logoutData.ts
 |   |   |-- navigationData.ts
@@ -212,6 +214,8 @@ clover-automation-project/
 |       |-- loginUtils.ts
 |       |-- logoutUtils.ts
 |       |-- navigationUtils.ts
+|       |-- priceUtils.ts
+|       |-- productDetailsUtils.ts
 |       `-- productsUtils.ts
 |-- .env.example
 |-- .gitignore
@@ -244,7 +248,11 @@ Playwright is configured with `testIdAttribute: "data-test"`. Mapping files stor
 this.usernameInput = page.getByTestId(loginSelectors.usernameInput);
 ```
 
-Scoped Add and Remove buttons use regular expressions to match their test ID prefixes. CSS locators remain where a test ID does not provide the required scope, such as the menu button and product details container.
+Shared product test IDs live in `inventorySelectors.ts`, the page title test ID lives in `navigationSelectors.ts`, and the error-message test ID lives in `messagesSelectors.ts`. Page Objects use `messagesSelectors.errorMessage` directly, while page mappings reuse the shared product and title values with their own container scoping. Scoped Add and Remove buttons use regular expressions to match their test ID prefixes. CSS locators remain where a test ID does not provide the required scope, such as the menu button and product details container.
+
+`NavigationPage` owns the Cart link and All Items navigation. `InventoryPage` owns Logout and reuses the shared menu-button selector. Product-details assertions in `productDetailsUtils.ts` share the URL and name checks used by Products and Navigation.
+
+`getProductDetailsPath()` builds product-details routes, and `getProtectedRouteError()` builds expected access errors for protected routes. Price conversion and display formatting use `parsePrice()` and `formatPrice()` from `priceUtils.ts`. `formatPrice()` returns the full dollar amount, such as `$29.99`.
 
 Checkout and Cart removal tests set `cartProductIds` to seed the cart before the first navigation. For example, `[4, 0]` is stored as the JSON array `[4,0]` under `localStorageKeys.cartContents` for the configured website origin. The fixture applies this storage state once per test, so later navigation does not restore removed items.
 

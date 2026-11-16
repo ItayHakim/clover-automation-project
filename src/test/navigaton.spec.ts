@@ -4,10 +4,8 @@ import { navigationProductPath, navigationUsername, protectedRouteCases } from "
 import { productToOpen } from "../testdata/productsData";
 import { assertCartPage } from "../utils/cartUtils";
 import { assertInventoryPage } from "../utils/inventoryUtils";
-import {
-    assertProductDetailsPage,
-    assertProtectedRouteRedirect,
-} from "../utils/navigationUtils";
+import { assertProtectedRouteRedirect } from "../utils/navigationUtils";
+import { assertProductDetailsPage } from "../utils/productDetailsUtils";
 
 test.describe("Navigation Page Tests", () => {
     test.describe("Signed-in navigation", () => {

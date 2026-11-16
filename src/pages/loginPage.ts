@@ -1,5 +1,6 @@
 import type { Locator, Page } from "@playwright/test";
 import { loginSelectors } from "../mapping/loginSelectors";
+import { messagesSelectors } from "../mapping/messagesSelectors";
 
 export class LoginPage {
   readonly usernameInput: Locator;
@@ -11,7 +12,7 @@ export class LoginPage {
     this.usernameInput = page.getByTestId(loginSelectors.usernameInput);
     this.passwordInput = page.getByTestId(loginSelectors.passwordInput);
     this.loginButton = page.getByTestId(loginSelectors.loginButton);
-    this.errorMessage = page.getByTestId(loginSelectors.errorMessage);
+    this.errorMessage = page.getByTestId(messagesSelectors.errorMessage);
   }
 
   async login(username: string, password: string) {
