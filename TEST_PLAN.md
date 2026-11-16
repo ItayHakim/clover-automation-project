@@ -6,7 +6,7 @@ Swag Labs is the SauceDemo storefront. Shoppers sign in, browse and sort the pro
 
 ## Scope
 
-The plan uses Playwright with TypeScript and the repository’s Chromium project. It checks visible page content, URL transitions, validation messages, cart and order state, the website's HTTP response, and the login form's appearance.
+ooThe plan uses Playwright with TypeScript and the repository’s Chromium project. It checks visible page content, URL transitions, validation messages, cart and order state, the website's HTTP response, and the login form's appearance.
 
 ## Coverage Status
 
