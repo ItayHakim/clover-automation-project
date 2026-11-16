@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { getRequiredEnvValue } from "../utils/commonUtils";
 import type { LoginUserType, RejectedLoginCaseType } from "../models/loginTypes";
 
