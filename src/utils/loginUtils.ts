@@ -2,15 +2,11 @@ import { urlPaths } from "../config/routes";
 import { LoginPage } from "../pages/loginPage";
 import { cookieNames } from "../config/cookies";
 import { expect, type Page } from "@playwright/test";
-import { inventorySelectors } from "../mapping/inventorySelectors";
 import { assertCookieValue } from "./commonUtils";
+import { assertInventoryPage } from "./inventoryUtils";
 
 export async function assertSuccessfulLogin(page: Page, username: string, timeout?: number) {
-    await expect(page).toHaveURL(urlPaths.inventory, { timeout });
-
-    const pageTitle = page.locator(inventorySelectors.pageTitle);
-    await expect.soft(pageTitle).toBeVisible({ timeout });
-    await expect.soft(pageTitle).toHaveText("Products", { timeout });
+    await assertInventoryPage(page, timeout);
     await assertCookieValue(page, cookieNames.sessionUsername, username);
 }
 

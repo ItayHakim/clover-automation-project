@@ -1,6 +1,6 @@
 # clover-automation-project
 
-End-to-end automation tests for the Swag Labs demo shop, built with Playwright Test and TypeScript. The current suite covers login, logout, Products, and Checkout on Sauce Demo. [Swag Labs](https://www.saucedemo.com/)
+End-to-end automation tests for the Swag Labs demo shop, built with Playwright Test and TypeScript. The current suite covers login, logout, Products, Checkout, and Navigation on Sauce Demo. [Swag Labs](https://www.saucedemo.com/)
 
 ## Requirements
 
@@ -88,7 +88,7 @@ npm test -- src/test/login.spec.ts --workers=3 --retries=0
 
 ## Current test coverage
 
-The suite currently contains 22 tests: nine Login, six Products, five Checkout, and two Logout scenarios.
+The suite currently contains 26 tests, covering nine Login, six Products, five Checkout, four Navigation, and two Logout scenarios.
 
 The login suite generates nine independent tests from the scenario data in `src/testdata/loginData.ts`.
 
@@ -136,7 +136,18 @@ The Logout suite contains two tests. Each test injects the standard user's sessi
 | `LOGOUT-01` | Log out as the standard user | Return to Login with visible login fields and button, and the session cookie removed |
 | `LOGOUT-02` | Open Inventory after logout | Redirect to Login with the Inventory-access error |
 
-Cart and Navigation remain empty placeholders for future coverage.
+The Navigation suite covers the four scenarios from the diagram's Navigation page. Signed-in tests inject the standard user's session cookie and open Products or Sauce Labs Backpack details directly. Protected-route tests open their target URL in a fresh signed-out context.
+
+| Test ID | Scenario | Expected result |
+| --- | --- | --- |
+| `NAV-01` | Open Cart, then Continue Shopping | `/cart.html` with a visible Your Cart title, then `/inventory.html` with a visible Products title |
+| `NAV-02` | Choose All Items from product details | Verified Backpack details return to `/inventory.html` with a visible Products title |
+| `NAV-03` | Open Inventory without a session | Redirect to Login with the Inventory-access error, visible login fields and button, and no session cookie |
+| `NAV-04` | Open Cart without a session | Redirect to Login with the Cart-access error, visible login fields and button, and no session cookie |
+
+Navigation route and title assertions stop the test on a mismatch before the next action.
+
+Cart remains an empty placeholder for future coverage.
 
 ## Project structure
 
@@ -155,17 +166,20 @@ clover-automation-project/
 |   |   |-- checkoutSelectors.ts
 |   |   |-- inventorySelectors.ts
 |   |   |-- loginSelectors.ts
+|   |   |-- navigationSelectors.ts
 |   |   `-- productDetailsSelectors.ts
 |   |-- models/
 |   |   |-- cartTypes.ts
 |   |   |-- checkoutTypes.ts
 |   |   |-- loginTypes.ts
+|   |   |-- navigationTypes.ts
 |   |   `-- productTypes.ts
 |   |-- pages/
 |   |   |-- cartPage.ts
 |   |   |-- checkoutPage.ts
 |   |   |-- inventoryPage.ts
 |   |   |-- loginPage.ts
+|   |   |-- navigationPage.ts
 |   |   `-- productDetailsPage.ts
 |   |-- test/
 |   |   |-- cart.spec.ts
@@ -178,13 +192,16 @@ clover-automation-project/
 |   |   |-- checkoutData.ts
 |   |   |-- loginData.ts
 |   |   |-- logoutData.ts
+|   |   |-- navigationData.ts
 |   |   `-- productsData.ts
 |   `-- utils/
 |       |-- cartUtils.ts
 |       |-- checkoutUtils.ts
 |       |-- commonUtils.ts
+|       |-- inventoryUtils.ts
 |       |-- loginUtils.ts
 |       |-- logoutUtils.ts
+|       |-- navigationUtils.ts
 |       `-- productsUtils.ts
 |-- .env.example
 |-- .gitignore
@@ -200,7 +217,7 @@ clover-automation-project/
 | `config` | Environment-based URL, page paths, cookie names, and local storage keys |
 | `fixture` | Shared navigation, session cookie and cart setup, and Page Object injection |
 | `mapping` | Page selectors and product sort values |
-| `models` | TypeScript types for users, products, cart items, and checkout inputs |
+| `models` | TypeScript types for users, products, cart items, checkout inputs, and protected-route scenarios |
 | `pages` | Page Object classes with locators and actions |
 | `test` | Test suites and scenario execution |
 | `testdata` | Environment-based inputs, expected errors, and per-user settings |
@@ -208,13 +225,13 @@ clover-automation-project/
 
 ## Test setup and timeouts
 
-Tests import `basePage` as `test` from the custom fixture. Before each test uses its page, the fixture navigates to `pagePath` and checks that the browser title contains Swag Labs. Tests can set their initial route with `test.use({ pagePath: urlPaths.login })`. The fixture provides `loginPage`, `inventoryPage`, `productDetailsPage`, `cartPage`, and `checkoutPage` instances. Products and Logout use `test.use({ pagePath: urlPaths.inventory, sessionUsername: usernames.standard })` to inject the session cookie before navigation.
+Tests import `basePage` as `test` from the custom fixture. Before each test uses its page, the fixture navigates to `pagePath` and checks that the browser title contains Swag Labs. Tests can set their initial route with `test.use({ pagePath: urlPaths.login })`. The fixture provides `loginPage`, `inventoryPage`, `productDetailsPage`, `cartPage`, `checkoutPage`, and `navigationPage` instances. Products, Logout, and signed-in Navigation tests set `sessionUsername` to inject the session cookie before navigation, using `test.use({ pagePath: urlPaths.inventory, sessionUsername: usernames.standard })` when starting on Products.
 
 Checkout sets `cartProductIds` to seed the cart before the first navigation. For example, `[4, 0]` is stored as the JSON array `[4,0]` under `localStorageKeys.cartContents` for the configured website origin. The fixture applies this storage state once per test, so later navigation does not restore items after checkout clears the cart.
 
 Each test receives an isolated browser context. `fullyParallel: true` enables parallel execution across and within test files.
 
-The performance glitch user has `isSlow: true`, which enables `test.slow()` for that case. Its `assertionTimeout: 15_000` gives the inventory URL and Products title checks extra time. `test.slow()` extends the overall test timeout, while the optional timeout argument in `assertSuccessfulLogin(page, timeout?: number)` controls those assertions. Other users use the configured assertion timeout.
+The performance glitch user has `isSlow: true`, which enables `test.slow()` for that case. Its `assertionTimeout: 15_000` gives the inventory URL and Products title checks extra time. `test.slow()` extends the overall test timeout, while the optional timeout argument in `assertSuccessfulLogin(page, username, timeout?: number)` controls those assertions. Other users use the configured assertion timeout.
 
 The shared assertions use Playwright's built-in assertions, including soft assertions that allow the remaining UI checks to run while recording a failure.
 
