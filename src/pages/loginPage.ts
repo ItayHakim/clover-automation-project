@@ -3,12 +3,14 @@ import { loginSelectors } from "../mapping/loginSelectors";
 import { messagesSelectors } from "../mapping/messagesSelectors";
 
 export class LoginPage {
+  readonly loginForm: Locator;
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
   readonly errorMessage: Locator;
 
   constructor(readonly page: Page) {
+    this.loginForm = page.locator(loginSelectors.loginForm);
     this.usernameInput = page.getByTestId(loginSelectors.usernameInput);
     this.passwordInput = page.getByTestId(loginSelectors.passwordInput);
     this.loginButton = page.getByTestId(loginSelectors.loginButton);

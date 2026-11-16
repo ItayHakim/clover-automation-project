@@ -1,4 +1,4 @@
-import { expect } from "@playwright/test";
+import { expect } from "./matchers";
 import { inventorySelectors } from "../mapping/inventorySelectors";
 import type { ProductSortCaseType } from "../models/productTypes";
 import { InventoryPage } from "../pages/inventoryPage";
@@ -14,35 +14,31 @@ export async function assertProductCatalog(inventoryPage: InventoryPage, expecte
         await expect.soft(name).toBeVisible();
         await expect.soft(name).toHaveText(/\S/);
         await expect.soft(image).toBeVisible();
+        await expect.poll(() => image.evaluate((element: HTMLImageElement) => {
+            return element.complete && element.naturalWidth > 0;
+        })).toBe(true);
         await expect.soft(price).toBeVisible();
         await expect.soft(price).toHaveText(/^\$\d+\.\d{2}$/);
     }
 }
 
-export async function assertProductsSorted(inventoryPage: InventoryPage, sortBy: ProductSortCaseType["sortBy"], descending: boolean, expectedCount: number,
+export async function assertProductsSorted(
+    inventoryPage: InventoryPage,
+    sortBy: ProductSortCaseType["sortBy"],
+    descending: boolean,
+    originalNames: string[],
+    originalPrices: number[],
 ) {
-    await assertProductCatalog(inventoryPage, expectedCount);
+    await assertProductCatalog(inventoryPage, originalNames.length);
+    await expect.poll(async () => (await inventoryPage.getProductNames()).sort()).toEqual([...originalNames].sort());
+    await expect.poll(async () => (await inventoryPage.getProductPrices()).sort((first, second) => first - second))
+        .toEqual([...originalPrices].sort((first, second) => first - second));
+    const direction = descending ? "desc" : "asc";
 
     if (sortBy === "price") {
-        await expect(inventoryPage.productPrices).toHaveCount(expectedCount);
-        const prices = await inventoryPage.getProductPrices();
-        const expectedPrices = prices.slice();
-        expectedPrices.sort((firstPrice, secondPrice) => firstPrice - secondPrice);
-        if (descending) {
-            expectedPrices.reverse();
-        }
-
-        await expect.poll(() => inventoryPage.getProductPrices()).toEqual(expectedPrices);
+        await expect.poll(() => inventoryPage.getProductPrices()).toBeSorted(direction);
         return;
     }
 
-    await expect(inventoryPage.productNames).toHaveCount(expectedCount);
-    const names = await inventoryPage.getProductNames();
-    const expectedNames = names.slice();
-    expectedNames.sort();
-    if (descending) {
-        expectedNames.reverse();
-    }
-
-    await expect.poll(() => inventoryPage.getProductNames()).toEqual(expectedNames);
+    await expect.poll(() => inventoryPage.getProductNames()).toBeSorted(direction);
 }

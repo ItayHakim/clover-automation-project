@@ -8,10 +8,10 @@ import {
 } from "../utils/cartUtils";
 import { assertInventoryPage } from "../utils/inventoryUtils";
 
-test.describe("Cart Page Tests", () => {
+test.describe("Cart Page Tests", { tag: "@regression" }, () => {
     test.use({ sessionUsername: cartUsername });
 
-    test.describe("Add products", () => {
+    test.describe("Add products", { tag: "@smoke" }, () => {
         test.use({ pagePath: urlPaths.inventory });
 
         test.beforeEach(async ({ page }) => {
