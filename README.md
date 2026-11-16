@@ -8,23 +8,23 @@ End-to-end automation tests for the Swag Labs demo shop, built with Playwright T
 - Git
 - Internet access to install dependencies and browsers and reach Sauce Demo
 
-The commands below use Windows PowerShell. The `.cmd` suffix runs npm and npx through their Windows command files.
+The commands below use Windows PowerShell.
 
 ## Setup
 
-Clone the repository and install the dependencies from `package-lock.json`.
+Clone the repository and install the project dependencies.
 
 ```powershell
 git clone https://github.com/ItayHakim/clover-automation-project.git
 cd clover-automation-project
-npm.cmd ci
+npm i
 ```
 
 Create your local environment file during the first setup, then install Chromium, the browser configured for this project.
 
 ```powershell
 Copy-Item .env.example .env
-npx.cmd playwright install chromium
+npx playwright install chromium
 ```
 
 Run all subsequent commands from the project root.
@@ -51,39 +51,39 @@ Run all subsequent commands from the project root.
 Run the complete suite in headless mode.
 
 ```powershell
-npm.cmd test
+npm test
 ```
 
 Run only the login test file.
 
 ```powershell
-npm.cmd test -- src/test/login.spec.ts
+npm test -- src/test/login.spec.ts
 ```
 
 Run a single scenario by its test ID. This example runs the locked-out account case.
 
 ```powershell
-npm.cmd test -- src/test/login.spec.ts -g "LOGIN-06"
+npm test -- src/test/login.spec.ts -g "LOGIN-06"
 ```
 
 Open the browser during execution or use Playwright's interactive test UI.
 
 ```powershell
-npm.cmd run test:headed
-npm.cmd run test:ui
+npm run test:headed
+npm run test:ui
 ```
 
 List discovered tests or check TypeScript types.
 
 ```powershell
-npm.cmd test -- --list
-npx.cmd tsc --noEmit
+npm test -- --list
+npx tsc --noEmit
 ```
 
 To run the login suite with three workers and retries disabled, use
 
 ```powershell
-npm.cmd test -- src/test/login.spec.ts --workers=3 --retries=0
+npm test -- src/test/login.spec.ts --workers=3 --retries=0
 ```
 
 ## Current test coverage
@@ -229,7 +229,7 @@ The current settings in `playwright.config.ts` are
 After a test run, open the HTML report with
 
 ```powershell
-npx.cmd playwright show-report
+npx playwright show-report
 ```
 
 The report is generated in `playwright-report/`. Failure screenshots, retained videos, and retry traces are stored in `test-results/` and linked from the report. Both folders are ignored by Git. A run with retries disabled produces no first-retry trace.

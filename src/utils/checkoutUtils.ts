@@ -20,6 +20,21 @@ export async function assertRejectedCheckout(checkoutPage: CheckoutPage, errorMe
     await expect(checkoutPage.errorMessage).toHaveText(errorMessage);
 }
 
+export function calculateCheckoutTotals(products: CartProductType[], taxRate: number) {
+    let subtotalCents = 0;
+    for (const product of products) {
+        subtotalCents += Math.round(product.price * 100) * product.quantity;
+    }
+    const taxCents = Math.round(subtotalCents * taxRate);
+    const totalCents = subtotalCents + taxCents;
+
+    return {
+        subtotal: (subtotalCents / 100).toFixed(2),
+        tax: (taxCents / 100).toFixed(2),
+        total: (totalCents / 100).toFixed(2),
+    };
+}
+
 export async function assertCheckoutOverview(
     checkoutPage: CheckoutPage,
     expectedProducts: CartProductType[],
@@ -29,16 +44,11 @@ export async function assertCheckoutOverview(
     await expect(checkoutPage.pageTitle).toHaveText("Checkout: Overview");
     await assertCartItems(checkoutPage.orderItems, expectedProducts);
 
-    let subtotalCents = 0;
-    for (const product of expectedProducts) {
-        subtotalCents += Math.round(product.price * 100) * product.quantity;
-    }
-    const taxCents = Math.round(subtotalCents * taxRate);
-    const totalCents = subtotalCents + taxCents;
+    const expectedTotals = calculateCheckoutTotals(expectedProducts, taxRate);
 
-    await expect(checkoutPage.subtotal).toHaveText(`Item total: $${(subtotalCents / 100).toFixed(2)}`);
-    await expect(checkoutPage.tax).toHaveText(`Tax: $${(taxCents / 100).toFixed(2)}`);
-    await expect(checkoutPage.total).toHaveText(`Total: $${(totalCents / 100).toFixed(2)}`);
+    await expect(checkoutPage.subtotal).toHaveText(`Item total: $${expectedTotals.subtotal}`);
+    await expect(checkoutPage.tax).toHaveText(`Tax: $${expectedTotals.tax}`);
+    await expect(checkoutPage.total).toHaveText(`Total: $${expectedTotals.total}`);
 }
 
 export async function assertSuccessfulCheckout(checkoutPage: CheckoutPage, confirmationMessage: string) {
