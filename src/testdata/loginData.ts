@@ -6,7 +6,7 @@ export const successfulLoginUsers: LoginUserType[] = [
   { testId: "LOGIN-02", name: "problem user", username: usernames.problem },
   { testId: "LOGIN-03", name: "visual user", username: usernames.visual },
   { testId: "LOGIN-04", name: "error user", username: usernames.error },
-  { testId: "LOGIN-05", name: "performance glitch user", username: usernames.performanceGlitch, isSlow: true, }
+  { testId: "LOGIN-05", name: "performance glitch user", username: usernames.performanceGlitch, isSlow: true, assertionTimeout: 15_000, }
 ];
 
 export const rejectedLoginCases: RejectedLoginCaseType[] = [
