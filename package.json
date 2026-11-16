@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Playwright automation tests for the Swag Labs demo shop website",
   "scripts": {
-    "postinstall": "node scripts/setup.cjs && playwright install chromium",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",

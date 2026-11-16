@@ -27,7 +27,7 @@ The six core Login cases are LOGIN-01 and LOGIN-05 through LOGIN-09. LOGIN-02 th
 
 ## Test Setup
 
-- Follow the repository README to install dependencies. Installation creates `.env` from `.env.example` when needed and installs Chromium.
+- Follow the repository README to install dependencies, copy `.env.example` to `.env`, and install Chromium.
 - Use a fresh browser context for each case. Use `standard_user` for signed-in flows unless the case names another account.
 - Seed the exact products needed for each case. Use Test User and ZIP code `12345` as valid checkout inputs.
 - Run visual comparisons against the committed Windows Chromium baseline. Generate and review a separate baseline when using another operating system.
@@ -137,12 +137,12 @@ Sign in for NAV-01 and NAV-02. Start NAV-03 and NAV-04 signed out in a fresh bro
 | Demo account behavior varies | Use the standard account for shopping flows. Give the performance glitch case its own slow-test budget. |
 | A sort starts in the expected order | For Name (A to Z), verify the reverse order first. Compare every entry with a separately sorted copy and parse prices as numbers. |
 | Amounts round differently | Convert captured prices to cents, round the 8% tax to cents, and compare totals using the rounded tax. |
-| Screenshot rendering varies across platforms | Use the committed Windows Chromium baseline in Windows CI. Generate and review the appropriate baseline for another operating system. |
+| Screenshot rendering varies across platforms | Use the committed Windows Chromium baseline for local Windows runs. Generate and review the appropriate baseline for another operating system. |
 
 ## Summary
 
 The six smoke checks are PRODUCT-01, CART-01, CART-02, CHECKOUT-01, LOGOUT-01, and NAV-01. Run them with `npm run test:smoke`.
 
-The suite has 32 implemented cases across eight specs, including 30 browser cases. The configuration uses one retry, isolated parallel tests, failure screenshots and videos, Playwright HTML reporting, and Allure reporting. Bonus coverage includes GitHub Actions, tags, a typed sorting matcher, HTTP checks, and a visual baseline.
+The suite has 32 implemented cases across eight specs, including 30 browser cases. The configuration uses one retry, isolated parallel tests, failure screenshots and videos, Playwright HTML reporting, and Allure reporting. Bonus coverage includes tags, a typed sorting matcher, HTTP checks, and a visual baseline.
 
 Check the selected cases with `npm test -- --list`. Run the suite with `npm test`, then open the HTML report with `npm run report`. Generate the Allure report with `npm run allure:generate` and view it with `npm run allure:open`. Record run results by test ID in the generated reports.

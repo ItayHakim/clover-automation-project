@@ -30,16 +30,18 @@ Clone the repository and install the project dependencies.
 git clone https://github.com/ItayHakim/cover-automation-project.git
 cd cover-automation-project
 npm ci
+Copy-Item .env.example .env
+npx playwright install chromium
 npm test
 ```
 
-`npm ci` runs the setup script, which creates `.env` from `.env.example` when needed and installs Chromium. Review `.env` to customize the website URL or demo accounts.
+Review `.env` to customize the website URL or demo accounts.
 
 Run all subsequent commands from the project root.
 
 ## Environment variables
 
-`.env.example` contains the public Sauce Demo accounts and shared password. Installation copies it to `.env` when the local file is absent. Adjust `.env` for your local setup.
+`.env.example` contains the public Sauce Demo accounts and shared password. Copy it to `.env` during setup, then adjust `.env` for your local setup.
 
 | Variable | Example value | Purpose |
 | --- | --- | --- |
@@ -186,7 +188,7 @@ The HTTP check uses Playwright's `request` fixture to verify the website's respo
 | `HTTP-01` | Request the website without a browser | Successful HTTP response containing the Swag Labs application HTML |
 | `VISUAL-01` | Compare the login form | The rendered form matches the reviewed Windows Chromium baseline |
 
-The screenshot baseline lives in `src/test/visual.spec.ts-snapshots/`. CI uses Windows to match its platform. When running on another operating system, generate and inspect that platform's baseline before committing it. Review intentional UI changes before updating an existing baseline. [Playwright visual comparisons](https://playwright.dev/docs/test-snapshots)
+The screenshot baseline lives in `src/test/visual.spec.ts-snapshots/` and targets local Windows Chromium runs. When running on another operating system, generate and inspect that platform's baseline before committing it. Review intentional UI changes before updating an existing baseline. [Playwright visual comparisons](https://playwright.dev/docs/test-snapshots)
 
 ```powershell
 npm test -- src/test/visual.spec.ts --update-snapshots
@@ -197,11 +199,6 @@ npm test -- src/test/visual.spec.ts
 
 ```text
 cover-automation-project/
-|-- .github/
-|   `-- workflows/
-|       `-- playwright.yml
-|-- scripts/
-|   `-- setup.cjs
 |-- src/
 |   |-- config/
 |   |   |-- cookies.ts
@@ -275,8 +272,6 @@ cover-automation-project/
 
 | Folder | Responsibility |
 | --- | --- |
-| `.github/workflows` | Run type checking and tests in GitHub Actions and upload reports |
-| `scripts` | Create the local environment file during dependency installation |
 | `config` | Environment-based URL, page paths, cookie names, and local storage keys |
 | `fixture` | Shared navigation, session cookie and cart setup, and Page Object injection |
 | `mapping` | Page selectors and product sort values |
@@ -351,7 +346,3 @@ npm run allure:open
 The generated Allure report is stored in `allure-report/`, which Git ignores.
 
 Include the complete generated `playwright-report/` folder with the assignment submission so the reviewer receives the run report and its attachments.
-
-## Continuous integration
-
-`.github/workflows/playwright.yml` runs on Windows with Node.js 24. It installs locked dependencies with the setup script, checks types, and runs the suite. It then generates the Allure report and uploads the Playwright report, Allure report, and test results as workflow artifacts, including when tests fail.
