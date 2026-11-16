@@ -12,4 +12,5 @@ export type RejectedLoginCaseType = {
   username: string;
   password: string;
   errorMessage: string;
+  expectsSessionCookie?: boolean;
 };

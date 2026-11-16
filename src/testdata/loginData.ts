@@ -19,7 +19,8 @@ export const rejectedLoginCases: RejectedLoginCaseType[] = [
     name: "locked-out user",
     username: getRequiredEnvValue("LOCKED_OUT_USERNAME"),
     password: globalPassword,
-    errorMessage: "Sorry, this user has been locked out."
+    errorMessage: "Sorry, this user has been locked out.",
+    expectsSessionCookie: true
   },
   {
     testId: "LOGIN-07",
