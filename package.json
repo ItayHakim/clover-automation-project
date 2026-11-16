@@ -1,5 +1,5 @@
 {
-  "name": "clover-automation-project",
+  "name": "cover-automation-project",
   "version": "1.0.0",
   "description": "Playwright automation tests for the Swag Labs demo shop website",
   "scripts": {
@@ -9,16 +9,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ItayHakim/clover-automation-project.git"
+    "url": "git+https://github.com/ItayHakim/cover-automation-project.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/ItayHakim/clover-automation-project/issues"
+    "url": "https://github.com/ItayHakim/cover-automation-project/issues"
   },
-  "homepage": "https://github.com/ItayHakim/clover-automation-project#readme",
+  "homepage": "https://github.com/ItayHakim/cover-automation-project#readme",
   "dependencies": {
     "playwright": "^1.65.1"
   },
