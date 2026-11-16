@@ -6,26 +6,29 @@ import { assertSuccessfulLogin } from "../utils/loginUtils";
 import { assertProductDetails } from "../utils/productDetailsUtils";
 import { assertProductCatalog, assertProductsSorted } from "../utils/productsUtils";
 
-test.describe("Products Page Tests", () => {
+test.describe("Products Page Tests", { tag: "@regression" }, () => {
     test.use({ pagePath: urlPaths.inventory, sessionUsername: productsUsername });
 
     test.beforeEach(async ({ page }) => {
         await assertSuccessfulLogin(page, productsUsername);
     });
 
-    test("PRODUCT-01 - show all product cards with a name, image and price", async ({ inventoryPage }) => {
+    test("PRODUCT-01 - show all product cards with a name, image and price", { tag: "@smoke" }, async ({ inventoryPage }) => {
         await assertProductCatalog(inventoryPage, productCount);
     });
 
     for (const sortCase of productSortCases) {
         test(`${sortCase.testId} - sort Products by ${sortCase.name}`, async ({ inventoryPage }) => {
+            await assertProductCatalog(inventoryPage, productCount);
+            const originalNames = await inventoryPage.getProductNames();
+            const originalPrices = await inventoryPage.getProductPrices();
             if (sortCase.sortOption === productSortOptions.nameAscending) {
                 await inventoryPage.sortProducts(productSortOptions.nameDescending);
-                await assertProductsSorted(inventoryPage, "name", true, productCount);
+                await assertProductsSorted(inventoryPage, "name", true, originalNames, originalPrices);
             }
 
             await inventoryPage.sortProducts(sortCase.sortOption);
-            await assertProductsSorted(inventoryPage, sortCase.sortBy, sortCase.descending, productCount);
+            await assertProductsSorted(inventoryPage, sortCase.sortBy, sortCase.descending, originalNames, originalPrices);
         });
     }
 

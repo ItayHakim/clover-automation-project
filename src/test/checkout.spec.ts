@@ -1,6 +1,7 @@
 import { urlPaths } from "../config/routes";
 import { basePage as test } from "../fixture/basePage";
 import { assertCartContents } from "../utils/cartUtils";
+import { assertInventoryPage } from "../utils/inventoryUtils";
 import {
     checkoutProducts,
     checkoutTaxRate,
@@ -16,25 +17,28 @@ import {
     assertSuccessfulCheckout,
 } from "../utils/checkoutUtils";
 
-test.describe("Checkout Page Tests", () => {
+test.describe("Checkout Page Tests", { tag: "@regression" }, () => {
     test.use({
-        pagePath: urlPaths.checkoutInformation,
+        pagePath: urlPaths.cart,
         sessionUsername: checkoutUsername,
         cartProductIds: [checkoutProducts[0].id],
     });
 
-    test.beforeEach(async ({ checkoutPage }) => {
+    test.beforeEach(async ({ cartPage, checkoutPage }) => {
+        await cartPage.startCheckout();
         await assertCheckoutInformation(checkoutPage);
     });
 
     test.describe("Complete an order", () => {
         test.use({ cartProductIds: checkoutProducts.map(product => product.id) });
 
-        test("CHECKOUT-01 - valid customer details complete an order", async ({ checkoutPage }) => {
+        test("CHECKOUT-01 - valid customer details complete an order", { tag: "@smoke" }, async ({ page, checkoutPage, checkoutOverviewPage, checkoutCompletePage }) => {
             await checkoutPage.submitInformation(customerDetails);
-            await assertCheckoutOverview(checkoutPage, checkoutProducts, checkoutTaxRate);
-            await checkoutPage.finishCheckout();
-            await assertSuccessfulCheckout(checkoutPage, orderConfirmationMessage);
+            await assertCheckoutOverview(checkoutOverviewPage, checkoutProducts, checkoutTaxRate);
+            await checkoutOverviewPage.finishCheckout();
+            await assertSuccessfulCheckout(checkoutCompletePage, orderConfirmationMessage);
+            await checkoutCompletePage.backToProducts();
+            await assertInventoryPage(page);
         });
     });
 

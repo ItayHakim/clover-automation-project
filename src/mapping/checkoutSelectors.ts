@@ -12,4 +12,5 @@ export const checkoutSelectors = {
   total: "total-label",
   finishButton: "finish",
   confirmationMessage: "complete-header",
+  backHomeButton: "back-to-products",
 };

@@ -5,15 +5,21 @@ export class CartPage {
   readonly pageTitle: Locator;
   readonly cartItems: Locator;
   readonly continueShoppingButton: Locator;
+  readonly checkoutButton: Locator;
 
   constructor(readonly page: Page) {
     this.pageTitle = page.getByTestId(cartSelectors.pageTitle);
     this.cartItems = page.getByTestId(cartSelectors.cartItems);
     this.continueShoppingButton = page.getByTestId(cartSelectors.continueShoppingButton);
+    this.checkoutButton = page.getByTestId(cartSelectors.checkoutButton);
   }
 
   async continueShopping() {
     await this.continueShoppingButton.click();
+  }
+
+  async startCheckout() {
+    await this.checkoutButton.click();
   }
 
   getProduct(name: string) {

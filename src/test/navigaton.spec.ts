@@ -7,11 +7,11 @@ import { assertInventoryPage } from "../utils/inventoryUtils";
 import { assertProtectedRouteRedirect } from "../utils/navigationUtils";
 import { assertProductDetailsPage } from "../utils/productDetailsUtils";
 
-test.describe("Navigation Page Tests", () => {
+test.describe("Navigation Page Tests", { tag: "@regression" }, () => {
     test.describe("Signed-in navigation", () => {
         test.use({ pagePath: urlPaths.inventory, sessionUsername: navigationUsername });
 
-        test("NAV-01 - Cart and Continue Shopping navigate between Cart and Products", async ({ page, navigationPage, cartPage }) => {
+        test("NAV-01 - Cart and Continue Shopping navigate between Cart and Products", { tag: "@smoke" }, async ({ page, navigationPage, cartPage }) => {
             await assertInventoryPage(page);
             await navigationPage.openCart();
             await assertCartPage(cartPage);

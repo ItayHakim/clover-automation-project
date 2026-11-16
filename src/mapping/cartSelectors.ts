@@ -8,5 +8,6 @@ export const cartSelectors = {
   productPrice: inventorySelectors.productPrice,
   productQuantity: "item-quantity",
   continueShoppingButton: "continue-shopping",
+  checkoutButton: "checkout",
   removeButton: /^remove-/,
 };

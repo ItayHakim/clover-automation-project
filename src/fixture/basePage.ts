@@ -6,6 +6,8 @@ import { InventoryPage } from "../pages/inventoryPage";
 import { ProductDetailsPage } from "../pages/productDetailsPage";
 import { CartPage } from "../pages/cartPage";
 import { CheckoutPage } from "../pages/checkoutPage";
+import { CheckoutOverviewPage } from "../pages/checkoutOverviewPage";
+import { CheckoutCompletePage } from "../pages/checkoutCompletePage";
 import { NavigationPage } from "../pages/navigationPage";
 import { expect, test } from "@playwright/test";
 
@@ -18,6 +20,8 @@ type BasePageFixtures = {
     productDetailsPage: ProductDetailsPage;
     cartPage: CartPage;
     checkoutPage: CheckoutPage;
+    checkoutOverviewPage: CheckoutOverviewPage;
+    checkoutCompletePage: CheckoutCompletePage;
     navigationPage: NavigationPage;
 };
 
@@ -73,6 +77,14 @@ export const basePage = test.extend<BasePageFixtures>({
 
     checkoutPage: async ({ page }, use) => {
         await use(new CheckoutPage(page));
+    },
+
+    checkoutOverviewPage: async ({ page }, use) => {
+        await use(new CheckoutOverviewPage(page));
+    },
+
+    checkoutCompletePage: async ({ page }, use) => {
+        await use(new CheckoutCompletePage(page));
     },
 
     navigationPage: async ({ page }, use) => {

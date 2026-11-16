@@ -5,9 +5,14 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./src/test",
   fullyParallel: true,
-  reporter: "html",
+  reporter: [
+    ["list"],
+    ["html", { open: "never" }],
+    ["allure-playwright", { resultsDir: "test-results/allure-results" }],
+  ],
   timeout: 30_000,
-  retries: 2,
+  retries: 1,
+  forbidOnly: !!process.env.CI,
   maxFailures: undefined,
   expect: {
     timeout: 5_000,

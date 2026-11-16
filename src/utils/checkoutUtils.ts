@@ -3,6 +3,8 @@ import { localStorageKeys } from "../config/localStorage";
 import { urlPaths } from "../config/routes";
 import type { CartProductType } from "../models/cartTypes";
 import { CheckoutPage } from "../pages/checkoutPage";
+import { CheckoutOverviewPage } from "../pages/checkoutOverviewPage";
+import { CheckoutCompletePage } from "../pages/checkoutCompletePage";
 import { assertCartItems } from "./cartUtils";
 import { formatPrice } from "./priceUtils";
 
@@ -37,7 +39,7 @@ export function calculateCheckoutTotals(products: CartProductType[], taxRate: nu
 }
 
 export async function assertCheckoutOverview(
-    checkoutPage: CheckoutPage,
+    checkoutPage: CheckoutOverviewPage,
     expectedProducts: CartProductType[],
     taxRate: number,
 ) {
@@ -52,7 +54,7 @@ export async function assertCheckoutOverview(
     await expect(checkoutPage.total).toHaveText(`Total: ${expectedTotals.total}`);
 }
 
-export async function assertSuccessfulCheckout(checkoutPage: CheckoutPage, confirmationMessage: string) {
+export async function assertSuccessfulCheckout(checkoutPage: CheckoutCompletePage, confirmationMessage: string) {
     await expect(checkoutPage.page).toHaveURL(urlPaths.checkoutComplete);
     await expect(checkoutPage.confirmationMessage).toHaveText(confirmationMessage);
     await expect(checkoutPage.confirmationMessage).toBeVisible();

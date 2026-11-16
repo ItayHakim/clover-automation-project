@@ -1,5 +1,4 @@
 import type { Locator, Page } from "@playwright/test";
-import { cartSelectors } from "../mapping/cartSelectors";
 import { checkoutSelectors } from "../mapping/checkoutSelectors";
 import { messagesSelectors } from "../mapping/messagesSelectors";
 import type { CheckoutCustomerType } from "../models/checkoutTypes";
@@ -12,12 +11,6 @@ export class CheckoutPage {
   readonly continueButton: Locator;
   readonly cancelButton: Locator;
   readonly errorMessage: Locator;
-  readonly orderItems: Locator;
-  readonly subtotal: Locator;
-  readonly tax: Locator;
-  readonly total: Locator;
-  readonly finishButton: Locator;
-  readonly confirmationMessage: Locator;
 
   constructor(readonly page: Page) {
     this.pageTitle = page.getByTestId(checkoutSelectors.pageTitle);
@@ -27,12 +20,6 @@ export class CheckoutPage {
     this.continueButton = page.getByTestId(checkoutSelectors.continueButton);
     this.cancelButton = page.getByTestId(checkoutSelectors.cancelButton);
     this.errorMessage = page.getByTestId(messagesSelectors.errorMessage);
-    this.orderItems = page.getByTestId(cartSelectors.cartItems);
-    this.subtotal = page.getByTestId(checkoutSelectors.subtotal);
-    this.tax = page.getByTestId(checkoutSelectors.tax);
-    this.total = page.getByTestId(checkoutSelectors.total);
-    this.finishButton = page.getByTestId(checkoutSelectors.finishButton);
-    this.confirmationMessage = page.getByTestId(checkoutSelectors.confirmationMessage);
   }
 
   async submitInformation(customerDetails: CheckoutCustomerType) {
@@ -44,9 +31,5 @@ export class CheckoutPage {
 
   async cancelCheckout() {
     await this.cancelButton.click();
-  }
-
-  async finishCheckout() {
-    await this.finishButton.click();
   }
 }
