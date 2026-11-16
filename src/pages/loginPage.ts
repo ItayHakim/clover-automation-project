@@ -8,10 +8,10 @@ export class LoginPage {
   readonly errorMessage: Locator;
 
   constructor(readonly page: Page) {
-    this.usernameInput = page.locator(loginSelectors.usernameInput);
-    this.passwordInput = page.locator(loginSelectors.passwordInput);
-    this.loginButton = page.locator(loginSelectors.loginButton);
-    this.errorMessage = page.locator(loginSelectors.errorMessage);
+    this.usernameInput = page.getByTestId(loginSelectors.usernameInput);
+    this.passwordInput = page.getByTestId(loginSelectors.passwordInput);
+    this.loginButton = page.getByTestId(loginSelectors.loginButton);
+    this.errorMessage = page.getByTestId(loginSelectors.errorMessage);
   }
 
   async login(username: string, password: string) {

@@ -38,9 +38,9 @@ export async function assertCartItems(cartItems: Locator, expectedProducts: Cart
         const product = cartItems.filter({
             has: cartItems.page().getByText(expectedProduct.name, { exact: true }),
         });
-        const name = product.locator(cartSelectors.productName);
-        const price = product.locator(cartSelectors.productPrice);
-        const quantity = product.locator(cartSelectors.productQuantity);
+        const name = product.getByTestId(cartSelectors.productName);
+        const price = product.getByTestId(cartSelectors.productPrice);
+        const quantity = product.getByTestId(cartSelectors.productQuantity);
 
         await expect(name).toBeVisible();
         await expect(name).toHaveText(expectedProduct.name);

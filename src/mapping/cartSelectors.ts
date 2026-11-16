@@ -1,9 +1,9 @@
 export const cartSelectors = {
-  pageTitle: '[data-test="title"]',
-  cartItems: '[data-test="inventory-item"]',
-  productName: '[data-test="inventory-item-name"]',
-  productPrice: '[data-test="inventory-item-price"]',
-  productQuantity: '[data-test="item-quantity"]',
-  continueShoppingButton: '[data-test="continue-shopping"]',
-  removeButton: '[data-test^="remove-"]',
+  pageTitle: "title",
+  cartItems: "inventory-item",
+  productName: "inventory-item-name",
+  productPrice: "inventory-item-price",
+  productQuantity: "item-quantity",
+  continueShoppingButton: "continue-shopping",
+  removeButton: /^remove-/,
 };

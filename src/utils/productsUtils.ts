@@ -9,9 +9,9 @@ export async function assertProductCatalog(inventoryPage: InventoryPage, expecte
     await expect(inventoryPage.productCards).toHaveCount(expectedCount);
 
     for (const product of await inventoryPage.productCards.all()) {
-        const name = product.locator(inventorySelectors.productName);
+        const name = product.getByTestId(inventorySelectors.productName);
         const image = product.locator(inventorySelectors.productImage);
-        const price = product.locator(inventorySelectors.productPrice);
+        const price = product.getByTestId(inventorySelectors.productPrice);
 
         await expect.soft(name).toBeVisible();
         await expect.soft(name).toHaveText(/\S/);

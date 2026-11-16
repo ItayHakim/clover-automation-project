@@ -237,6 +237,15 @@ clover-automation-project/
 
 Tests import `basePage` as `test` from the custom fixture. Before each test uses its page, the fixture navigates to `pagePath` and checks that the browser title contains Swag Labs. Tests can set their initial route with `test.use({ pagePath: urlPaths.login })`. The fixture provides `loginPage`, `inventoryPage`, `productDetailsPage`, `cartPage`, `checkoutPage`, and `navigationPage` instances. Products, Cart, Logout, and signed-in Navigation tests set `sessionUsername` to inject the session cookie before navigation, using `test.use({ pagePath: urlPaths.inventory, sessionUsername: usernames.standard })` when starting on Products.
 
+Playwright is configured with `testIdAttribute: "data-test"`. Mapping files store the attribute values, and Page Objects and assertion helpers use `getByTestId()` to locate them:
+
+```ts
+// loginSelectors.usernameInput is "username"
+this.usernameInput = page.getByTestId(loginSelectors.usernameInput);
+```
+
+Scoped Add and Remove buttons use regular expressions to match their test ID prefixes. CSS locators remain where a test ID does not provide the required scope, such as the menu button and product details container.
+
 Checkout and Cart removal tests set `cartProductIds` to seed the cart before the first navigation. For example, `[4, 0]` is stored as the JSON array `[4,0]` under `localStorageKeys.cartContents` for the configured website origin. The fixture applies this storage state once per test, so later navigation does not restore removed items.
 
 Each test receives an isolated browser context. `fullyParallel: true` enables parallel execution across and within test files.
@@ -253,6 +262,7 @@ The current settings in `playwright.config.ts` are
 | --- | --- |
 | Test directory | `./src/test` |
 | Browser project | Chromium with Desktop Chrome settings |
+| Test ID attribute | `data-test` |
 | Parallel execution | Enabled |
 | Test timeout | 30 seconds |
 | Default assertion timeout | 5 seconds |

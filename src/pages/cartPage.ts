@@ -7,9 +7,9 @@ export class CartPage {
   readonly continueShoppingButton: Locator;
 
   constructor(readonly page: Page) {
-    this.pageTitle = page.locator(cartSelectors.pageTitle);
-    this.cartItems = page.locator(cartSelectors.cartItems);
-    this.continueShoppingButton = page.locator(cartSelectors.continueShoppingButton);
+    this.pageTitle = page.getByTestId(cartSelectors.pageTitle);
+    this.cartItems = page.getByTestId(cartSelectors.cartItems);
+    this.continueShoppingButton = page.getByTestId(cartSelectors.continueShoppingButton);
   }
 
   async continueShopping() {
@@ -21,6 +21,6 @@ export class CartPage {
   }
 
   async removeProduct(name: string) {
-    await this.getProduct(name).locator(cartSelectors.removeButton).click();
+    await this.getProduct(name).getByTestId(cartSelectors.removeButton).click();
   }
 }
