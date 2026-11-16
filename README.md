@@ -1,6 +1,15 @@
-# clover-automation-project
+# cover-automation-project
 
 End-to-end automation tests for the Swag Labs demo shop, built with Playwright Test and TypeScript. The current suite covers login, logout, Products, Cart, Checkout, and Navigation on Sauce Demo. [Swag Labs](https://www.saucedemo.com/)
+
+## Technologies
+
+| Technology | Purpose |
+| --- | --- |
+| Playwright Test | Browser automation, custom fixtures, assertions, parallel execution, and HTML reporting |
+| TypeScript | Strict type checking for tests, Page Objects, fixtures, and scenario data |
+| dotenv | Load the website URL and demo credentials from `.env` |
+| Node.js and npm | Run the project and manage dependencies |
 
 ## Requirements
 
@@ -10,13 +19,15 @@ End-to-end automation tests for the Swag Labs demo shop, built with Playwright T
 
 The commands below use Windows PowerShell.
 
+If PowerShell blocks `npm.ps1` or `npx.ps1`, use `npm.cmd` or `npx.cmd` in the commands below.
+
 ## Setup
 
 Clone the repository and install the project dependencies.
 
 ```powershell
-git clone https://github.com/ItayHakim/clover-automation-project.git
-cd clover-automation-project
+git clone https://github.com/ItayHakim/cover-automation-project.git
+cd cover-automation-project
 npm i
 ```
 
@@ -44,7 +55,7 @@ Run all subsequent commands from the project root.
 | `VISUAL_USERNAME` | `visual_user` | Visual account |
 | `GLOBAL_PASSWORD` | `secret_sauce` | Shared valid password |
 
-`dotenv` loads these values into `process.env`. The route configuration validates `BASE_URL`, and the login data loader checks that all required credentials are present. Git ignores `.env`, while `.env.example` is included in the repository for setup.
+`dotenv` loads these values into `process.env`. The route configuration validates `BASE_URL`, and the user configuration checks that all required credentials are present. Git ignores `.env`, while `.env.example` is included in the repository for setup.
 
 ## Running tests
 
@@ -90,6 +101,8 @@ npm test -- src/test/login.spec.ts --workers=3 --retries=0
 
 The suite currently contains 30 tests, covering nine Login, six Products, four Cart, five Checkout, four Navigation, and two Logout scenarios.
 
+Scope, detailed test steps, expected results, priorities, and test risks are documented in the companion test plan. [Test plan](TEST_PLAN.md)
+
 The login suite generates nine independent tests from the scenario data in `src/testdata/loginData.ts`.
 
 | Test ID | Scenario | Expected result |
@@ -106,7 +119,7 @@ The login suite generates nine independent tests from the scenario data in `src/
 
 Rejected login tests also check that the username field, password field, and login button are visible. The incorrect-password scenario derives an invalid value from the shared password. The missing-field scenarios submit an empty string for the relevant field.
 
-The Products suite covers the six scenarios from the diagram's Products page. Each test injects the standard user's session cookie and opens Inventory directly.
+The Products suite covers six scenarios. Each test injects the standard user's session cookie and opens Inventory directly.
 
 | Test ID | Scenario | Expected result |
 | --- | --- | --- |
@@ -117,7 +130,7 @@ The Products suite covers the six scenarios from the diagram's Products page. Ea
 | `PRODUCT-05` | Price (high to low) | Full price list in descending numeric order |
 | `PRODUCT-06` | Open Sauce Labs Backpack | Item URL and name, description, and price match its catalog card |
 
-The Cart suite covers the four scenarios from the diagram's Cart page. Each test injects the standard user's session cookie. Add tests start on Inventory, save each product's displayed name and price, click Add to cart, and open Cart. Removal tests seed the required items and open Cart directly, then verify the starting contents and badge before clicking Remove.
+The Cart suite covers four scenarios. Each test injects the standard user's session cookie. Add tests start on Inventory, save each product's displayed name and price, click Add to cart, and open Cart. Removal tests seed the required items and open Cart directly, then verify the starting contents and badge before clicking Remove.
 
 | Test ID | Scenario | Expected result |
 | --- | --- | --- |
@@ -128,11 +141,11 @@ The Cart suite covers the four scenarios from the diagram's Cart page. Each test
 
 Cart scenarios live in `src/testdata/cartData.ts`. Backpack and Bike Light definitions in `src/testdata/productsData.ts` are shared by Cart and Checkout.
 
-The Checkout suite covers the five scenarios from the diagram's Checkout page. Each test injects the standard user's session cookie and seeds `cart-contents` in local storage before opening `/checkout-step-one.html` directly. The completed order uses Backpack and Bike Light; validation and cancellation use Backpack only.
+The Checkout suite covers five scenarios. Each test injects the standard user's session cookie and seeds `cart-contents` in local storage before opening `/checkout-step-one.html` directly. The completed order uses Backpack and Bike Light. Validation and cancellation use Backpack only.
 
 | Test ID | Scenario | Expected result |
 | --- | --- | --- |
-| `CHECKOUT-01` | Valid customer details | Overview items, quantities, prices, subtotal, 8% tax rounded to cents, and total match; Finish shows confirmation and clears the cart |
+| `CHECKOUT-01` | Valid customer details | Overview items, quantities, prices, subtotal, 8% tax rounded to cents, and total match. Finish shows confirmation and clears the cart |
 | `CHECKOUT-02` | Missing first name | Stay on Your Information with the first-name-required error |
 | `CHECKOUT-03` | Missing last name | Stay on Your Information with the last-name-required error |
 | `CHECKOUT-04` | Missing postal code | Stay on Your Information with the postal-code-required error |
@@ -147,7 +160,7 @@ The Logout suite contains two tests. Each test injects the standard user's sessi
 | `LOGOUT-01` | Log out as the standard user | Return to Login with visible login fields and button, and the session cookie removed |
 | `LOGOUT-02` | Open Inventory after logout | Redirect to Login with the Inventory-access error |
 
-The Navigation suite covers the four scenarios from the diagram's Navigation page. Signed-in tests inject the standard user's session cookie and open Products or Sauce Labs Backpack details directly. Protected-route tests open their target URL in a fresh signed-out context.
+The Navigation suite covers four scenarios. Signed-in tests inject the standard user's session cookie and open Products or Sauce Labs Backpack details directly. Protected-route tests open their target URL in a fresh signed-out context.
 
 | Test ID | Scenario | Expected result |
 | --- | --- | --- |
@@ -161,7 +174,7 @@ Navigation route and title assertions stop the test on a mismatch before the nex
 ## Project structure
 
 ```text
-clover-automation-project/
+cover-automation-project/
 |-- src/
 |   |-- config/
 |   |   |-- cookies.ts
@@ -223,6 +236,7 @@ clover-automation-project/
 |-- package-lock.json
 |-- playwright.config.ts
 |-- README.md
+|-- TEST_PLAN.md
 `-- tsconfig.json
 ```
 
@@ -241,7 +255,7 @@ clover-automation-project/
 
 Tests import `basePage` as `test` from the custom fixture. Before each test uses its page, the fixture navigates to `pagePath` and checks that the browser title contains Swag Labs. Tests can set their initial route with `test.use({ pagePath: urlPaths.login })`. The fixture provides `loginPage`, `inventoryPage`, `productDetailsPage`, `cartPage`, `checkoutPage`, and `navigationPage` instances. Products, Cart, Logout, and signed-in Navigation tests set `sessionUsername` to inject the session cookie before navigation, using `test.use({ pagePath: urlPaths.inventory, sessionUsername: usernames.standard })` when starting on Products.
 
-Playwright is configured with `testIdAttribute: "data-test"`. Mapping files store the attribute values, and Page Objects and assertion helpers use `getByTestId()` to locate them:
+Playwright is configured with `testIdAttribute: "data-test"`. Mapping files store the attribute values, and Page Objects and assertion helpers use `getByTestId()` to locate them, as shown below.
 
 ```ts
 // loginSelectors.usernameInput is "username"
@@ -287,3 +301,5 @@ npx playwright show-report
 ```
 
 The report is generated in `playwright-report/`. Failure screenshots, retained videos, and retry traces are stored in `test-results/` and linked from the report. Both folders are ignored by Git. A run with retries disabled produces no first-retry trace.
+
+Include the complete generated `playwright-report/` folder with the assignment submission so the reviewer receives the run report and its attachments.
