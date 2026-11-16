@@ -88,6 +88,8 @@ npm test -- src/test/login.spec.ts --workers=3 --retries=0
 
 ## Current test coverage
 
+The suite currently contains 22 tests: nine Login, six Products, five Checkout, and two Logout scenarios.
+
 The login suite generates nine independent tests from the scenario data in `src/testdata/loginData.ts`.
 
 | Test ID | Scenario | Expected result |
@@ -127,7 +129,14 @@ The Checkout suite covers the five scenarios from the diagram's Checkout page. E
 
 The overview assertions stop the test on a mismatch before clicking Finish. Expected products and customer inputs live in `src/testdata/checkoutData.ts`.
 
-The Logout suite covers returning to Login and blocking Inventory access after logout. Cart and Navigation remain placeholders for future coverage.
+The Logout suite contains two tests. Each test injects the standard user's session cookie and opens Inventory directly.
+
+| Test ID | Scenario | Expected result |
+| --- | --- | --- |
+| `LOGOUT-01` | Log out as the standard user | Return to Login with visible login fields and button, and the session cookie removed |
+| `LOGOUT-02` | Open Inventory after logout | Redirect to Login with the Inventory-access error |
+
+Cart and Navigation remain empty placeholders for future coverage.
 
 ## Project structure
 
