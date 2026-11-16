@@ -6,6 +6,7 @@ import { InventoryPage } from "../pages/inventoryPage";
 import { ProductDetailsPage } from "../pages/productDetailsPage";
 import { CartPage } from "../pages/cartPage";
 import { CheckoutPage } from "../pages/checkoutPage";
+import { NavigationPage } from "../pages/navigationPage";
 import { expect, test } from "@playwright/test";
 
 type BasePageFixtures = {
@@ -17,6 +18,7 @@ type BasePageFixtures = {
     productDetailsPage: ProductDetailsPage;
     cartPage: CartPage;
     checkoutPage: CheckoutPage;
+    navigationPage: NavigationPage;
 };
 
 if (!baseURL) {
@@ -71,6 +73,10 @@ export const basePage = test.extend<BasePageFixtures>({
 
     checkoutPage: async ({ page }, use) => {
         await use(new CheckoutPage(page));
+    },
+
+    navigationPage: async ({ page }, use) => {
+        await use(new NavigationPage(page));
     },
 });
 
