@@ -1,6 +1,6 @@
 # clover-automation-project
 
-End-to-end automation tests for the Swag Labs demo shop, built with Playwright Test and TypeScript. The current suite covers login, logout, and Products on Sauce Demo. [Swag Labs](https://www.saucedemo.com/)
+End-to-end automation tests for the Swag Labs demo shop, built with Playwright Test and TypeScript. The current suite covers login, logout, Products, and Checkout on Sauce Demo. [Swag Labs](https://www.saucedemo.com/)
 
 ## Requirements
 
@@ -8,23 +8,23 @@ End-to-end automation tests for the Swag Labs demo shop, built with Playwright T
 - Git
 - Internet access to install dependencies and browsers and reach Sauce Demo
 
-The commands below use Windows PowerShell. The `.cmd` suffix runs npm and npx through their Windows command files.
+The commands below use Windows PowerShell.
 
 ## Setup
 
-Clone the repository and install the dependencies from `package-lock.json`.
+Clone the repository and install the project dependencies.
 
 ```powershell
 git clone https://github.com/ItayHakim/clover-automation-project.git
 cd clover-automation-project
-npm.cmd ci
+npm i
 ```
 
 Create your local environment file during the first setup, then install Chromium, the browser configured for this project.
 
 ```powershell
 Copy-Item .env.example .env
-npx.cmd playwright install chromium
+npx playwright install chromium
 ```
 
 Run all subsequent commands from the project root.
@@ -51,39 +51,39 @@ Run all subsequent commands from the project root.
 Run the complete suite in headless mode.
 
 ```powershell
-npm.cmd test
+npm test
 ```
 
 Run only the login test file.
 
 ```powershell
-npm.cmd test -- src/test/login.spec.ts
+npm test -- src/test/login.spec.ts
 ```
 
 Run a single scenario by its test ID. This example runs the locked-out account case.
 
 ```powershell
-npm.cmd test -- src/test/login.spec.ts -g "LOGIN-06"
+npm test -- src/test/login.spec.ts -g "LOGIN-06"
 ```
 
 Open the browser during execution or use Playwright's interactive test UI.
 
 ```powershell
-npm.cmd run test:headed
-npm.cmd run test:ui
+npm run test:headed
+npm run test:ui
 ```
 
 List discovered tests or check TypeScript types.
 
 ```powershell
-npm.cmd test -- --list
-npx.cmd tsc --noEmit
+npm test -- --list
+npx tsc --noEmit
 ```
 
 To run the login suite with three workers and retries disabled, use
 
 ```powershell
-npm.cmd test -- src/test/login.spec.ts --workers=3 --retries=0
+npm test -- src/test/login.spec.ts --workers=3 --retries=0
 ```
 
 ## Current test coverage
@@ -115,7 +115,19 @@ The Products suite covers the six scenarios from the diagram's Products page. Ea
 | `PRODUCT-05` | Price (high to low) | Full price list in descending numeric order |
 | `PRODUCT-06` | Open Sauce Labs Backpack | Item URL and name, description, and price match its catalog card |
 
-The Logout suite covers returning to Login and blocking Inventory access after logout. Cart, Checkout, and Navigation remain placeholders for future coverage.
+The Checkout suite covers the five scenarios from the diagram's Checkout page. Each test injects the standard user's session cookie and seeds `cart-contents` in local storage before opening `/checkout-step-one.html` directly. The completed order uses Backpack and Bike Light; validation and cancellation use Backpack only.
+
+| Test ID | Scenario | Expected result |
+| --- | --- | --- |
+| `CHECKOUT-01` | Valid customer details | Overview items, quantities, prices, subtotal, 8% tax rounded to cents, and total match; Finish shows confirmation and clears the cart |
+| `CHECKOUT-02` | Missing first name | Stay on Your Information with the first-name-required error |
+| `CHECKOUT-03` | Missing last name | Stay on Your Information with the last-name-required error |
+| `CHECKOUT-04` | Missing postal code | Stay on Your Information with the postal-code-required error |
+| `CHECKOUT-05` | Cancel from Your Information | Return to Cart with the same item, quantity, and price |
+
+The overview assertions stop the test on a mismatch before clicking Finish. Expected products and customer inputs live in `src/testdata/checkoutData.ts`.
+
+The Logout suite covers returning to Login and blocking Inventory access after logout. Cart and Navigation remain placeholders for future coverage.
 
 ## Project structure
 
@@ -123,16 +135,29 @@ The Logout suite covers returning to Login and blocking Inventory access after l
 clover-automation-project/
 |-- src/
 |   |-- config/
-|   |   `-- routes.ts
+|   |   |-- cookies.ts
+|   |   |-- localStorage.ts
+|   |   |-- routes.ts
+|   |   `-- users.ts
 |   |-- fixture/
 |   |   `-- basePage.ts
 |   |-- mapping/
+|   |   |-- cartSelectors.ts
+|   |   |-- checkoutSelectors.ts
 |   |   |-- inventorySelectors.ts
-|   |   `-- loginSelectors.ts
+|   |   |-- loginSelectors.ts
+|   |   `-- productDetailsSelectors.ts
 |   |-- models/
-|   |   `-- loginTypes.ts
+|   |   |-- cartTypes.ts
+|   |   |-- checkoutTypes.ts
+|   |   |-- loginTypes.ts
+|   |   `-- productTypes.ts
 |   |-- pages/
-|   |   `-- loginPage.ts
+|   |   |-- cartPage.ts
+|   |   |-- checkoutPage.ts
+|   |   |-- inventoryPage.ts
+|   |   |-- loginPage.ts
+|   |   `-- productDetailsPage.ts
 |   |-- test/
 |   |   |-- cart.spec.ts
 |   |   |-- checkout.spec.ts
@@ -141,10 +166,17 @@ clover-automation-project/
 |   |   |-- navigaton.spec.ts
 |   |   `-- products.spec.ts
 |   |-- testdata/
-|   |   `-- loginData.ts
+|   |   |-- checkoutData.ts
+|   |   |-- loginData.ts
+|   |   |-- logoutData.ts
+|   |   `-- productsData.ts
 |   `-- utils/
+|       |-- cartUtils.ts
+|       |-- checkoutUtils.ts
 |       |-- commonUtils.ts
-|       `-- loginUtils.ts
+|       |-- loginUtils.ts
+|       |-- logoutUtils.ts
+|       `-- productsUtils.ts
 |-- .env.example
 |-- .gitignore
 |-- package.json
@@ -156,10 +188,10 @@ clover-automation-project/
 
 | Folder | Responsibility |
 | --- | --- |
-| `config` | Environment-based website URL and page paths |
-| `fixture` | Shared navigation, page-title check, and LoginPage injection |
-| `mapping` | Login and inventory selectors |
-| `models` | TypeScript types for users and rejected login cases |
+| `config` | Environment-based URL, page paths, cookie names, and local storage keys |
+| `fixture` | Shared navigation, session cookie and cart setup, and Page Object injection |
+| `mapping` | Page selectors and product sort values |
+| `models` | TypeScript types for users, products, cart items, and checkout inputs |
 | `pages` | Page Object classes with locators and actions |
 | `test` | Test suites and scenario execution |
 | `testdata` | Environment-based inputs, expected errors, and per-user settings |
@@ -167,7 +199,9 @@ clover-automation-project/
 
 ## Test setup and timeouts
 
-Tests import `basePage` as `test` from the custom fixture. Before each test uses its page, the fixture navigates to `pagePath` and checks that the browser title contains Swag Labs. Tests can set their initial route with `test.use({ pagePath: urlPaths.login })`. The fixture provides `loginPage`, `inventoryPage`, and `productDetailsPage` instances. Products and Logout use `test.use({ pagePath: urlPaths.inventory, sessionUsername: usernames.standard })` to inject the session cookie before navigation.
+Tests import `basePage` as `test` from the custom fixture. Before each test uses its page, the fixture navigates to `pagePath` and checks that the browser title contains Swag Labs. Tests can set their initial route with `test.use({ pagePath: urlPaths.login })`. The fixture provides `loginPage`, `inventoryPage`, `productDetailsPage`, `cartPage`, and `checkoutPage` instances. Products and Logout use `test.use({ pagePath: urlPaths.inventory, sessionUsername: usernames.standard })` to inject the session cookie before navigation.
+
+Checkout sets `cartProductIds` to seed the cart before the first navigation. For example, `[4, 0]` is stored as the JSON array `[4,0]` under `localStorageKeys.cartContents` for the configured website origin. The fixture applies this storage state once per test, so later navigation does not restore items after checkout clears the cart.
 
 Each test receives an isolated browser context. `fullyParallel: true` enables parallel execution across and within test files.
 
@@ -195,7 +229,7 @@ The current settings in `playwright.config.ts` are
 After a test run, open the HTML report with
 
 ```powershell
-npx.cmd playwright show-report
+npx playwright show-report
 ```
 
 The report is generated in `playwright-report/`. Failure screenshots, retained videos, and retry traces are stored in `test-results/` and linked from the report. Both folders are ignored by Git. A run with retries disabled produces no first-retry trace.
