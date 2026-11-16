@@ -2,6 +2,7 @@ import { baseURL } from "../config/routes";
 import { cookieNames } from "../config/cookies";
 import { LoginPage } from "../pages/loginPage";
 import { InventoryPage } from "../pages/inventoryPage";
+import { ProductDetailsPage } from "../pages/productDetailsPage";
 import { expect, test } from "@playwright/test";
 
 type BasePageFixtures = {
@@ -9,6 +10,7 @@ type BasePageFixtures = {
     sessionUsername: string;
     loginPage: LoginPage;
     inventoryPage: InventoryPage;
+    productDetailsPage: ProductDetailsPage;
 };
 
 if (!baseURL) {
@@ -35,6 +37,10 @@ export const basePage = test.extend<BasePageFixtures>({
 
     inventoryPage: async ({ page }, use) => {
         await use(new InventoryPage(page));
+    },
+
+    productDetailsPage: async ({ page }, use) => {
+        await use(new ProductDetailsPage(page));
     },
 });
 

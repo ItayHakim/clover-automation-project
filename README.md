@@ -1,6 +1,6 @@
 # clover-automation-project
 
-End-to-end automation tests for the Swag Labs demo shop, built with Playwright Test and TypeScript. The current suite covers successful logins and rejected login attempts on Sauce Demo. [Swag Labs](https://www.saucedemo.com/)
+End-to-end automation tests for the Swag Labs demo shop, built with Playwright Test and TypeScript. The current suite covers login, logout, and Products on Sauce Demo. [Swag Labs](https://www.saucedemo.com/)
 
 ## Requirements
 
@@ -104,7 +104,18 @@ The login suite generates nine independent tests from the scenario data in `src/
 
 Rejected login tests also check that the username field, password field, and login button are visible. The incorrect-password scenario derives an invalid value from the shared password. The missing-field scenarios submit an empty string for the relevant field.
 
-The Products, Cart, Checkout, Logout, and Navigation spec files are placeholders for future coverage.
+The Products suite covers the six scenarios from the diagram's Products page. Each test injects the standard user's session cookie and opens Inventory directly.
+
+| Test ID | Scenario | Expected result |
+| --- | --- | --- |
+| `PRODUCT-01` | Display the catalog | Six cards, each with a visible name, image, and price |
+| `PRODUCT-02` | Name (A to Z) | Full name list in ascending order, starting from verified Z-to-A order |
+| `PRODUCT-03` | Name (Z to A) | Full name list in descending order |
+| `PRODUCT-04` | Price (low to high) | Full price list in ascending numeric order |
+| `PRODUCT-05` | Price (high to low) | Full price list in descending numeric order |
+| `PRODUCT-06` | Open Sauce Labs Backpack | Item URL and name, description, and price match its catalog card |
+
+The Logout suite covers returning to Login and blocking Inventory access after logout. Cart, Checkout, and Navigation remain placeholders for future coverage.
 
 ## Project structure
 
@@ -156,7 +167,7 @@ clover-automation-project/
 
 ## Test setup and timeouts
 
-Tests import `basePage` as `test` from the custom fixture. Before each test uses its page, the fixture navigates to `pagePath` and checks that the browser title contains Swag Labs. Tests can set their initial route with `test.use({ pagePath: urlPaths.login })`. The fixture also provides a `loginPage` instance with a `login(username, password)` method.
+Tests import `basePage` as `test` from the custom fixture. Before each test uses its page, the fixture navigates to `pagePath` and checks that the browser title contains Swag Labs. Tests can set their initial route with `test.use({ pagePath: urlPaths.login })`. The fixture provides `loginPage`, `inventoryPage`, and `productDetailsPage` instances. Products and Logout use `test.use({ pagePath: urlPaths.inventory, sessionUsername: usernames.standard })` to inject the session cookie before navigation.
 
 Each test receives an isolated browser context. `fullyParallel: true` enables parallel execution across and within test files.
 
