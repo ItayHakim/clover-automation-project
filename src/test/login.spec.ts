@@ -1,6 +1,7 @@
 import { urlPaths } from "../config/routes";
+import { globalPassword } from "../config/users";
 import { basePage as test } from "../fixture/basePage";
-import { globalPassword, rejectedLoginCases, successfulLoginUsers } from "../testdata/loginData";
+import { rejectedLoginCases, successfulLoginUsers } from "../testdata/loginData";
 import { assertRejectedLogin, assertSuccessfulLogin } from "../utils/loginUtils";
 
 test.describe("Login Page Tests", () => {

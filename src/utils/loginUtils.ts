@@ -3,13 +3,7 @@ import { LoginPage } from "../pages/loginPage";
 import { cookieNames } from "../config/cookies";
 import { expect, type Page } from "@playwright/test";
 import { inventorySelectors } from "../mapping/inventorySelectors";
-
-async function assertSessionUsernameCookie(page: Page, username: string) {
-    await expect.poll(async () => {
-        const cookies = await page.context().cookies(page.url());
-        return cookies.find(cookie => cookie.name === cookieNames.sessionUsername)?.value;
-    }, { message: `Expected ${cookieNames.sessionUsername} cookie to contain ${username}` }).toBe(username);
-}
+import { assertCookieValue } from "./commonUtils";
 
 export async function assertSuccessfulLogin(page: Page, username: string, timeout?: number) {
     await expect(page).toHaveURL(urlPaths.inventory, { timeout });
@@ -17,7 +11,7 @@ export async function assertSuccessfulLogin(page: Page, username: string, timeou
     const pageTitle = page.locator(inventorySelectors.pageTitle);
     await expect.soft(pageTitle).toBeVisible({ timeout });
     await expect.soft(pageTitle).toHaveText("Products", { timeout });
-    await assertSessionUsernameCookie(page, username);
+    await assertCookieValue(page, cookieNames.sessionUsername, username);
 }
 
 export async function assertRejectedLogin(loginPage: LoginPage, errorMessage: string, sessionUsername?: string) {
@@ -28,6 +22,6 @@ export async function assertRejectedLogin(loginPage: LoginPage, errorMessage: st
     await expect.soft(loginPage.passwordInput).toBeVisible();
     await expect.soft(loginPage.loginButton).toBeVisible();
     if (sessionUsername !== undefined) {
-        await assertSessionUsernameCookie(loginPage.page, sessionUsername);
+        await assertCookieValue(loginPage.page, cookieNames.sessionUsername, sessionUsername);
     }
 }

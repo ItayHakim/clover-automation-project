@@ -1,23 +1,19 @@
-import "dotenv/config";
-import { getRequiredEnvValue } from "../utils/commonUtils";
+import { globalPassword, usernames } from "../config/users";
 import type { LoginUserType, RejectedLoginCaseType } from "../models/loginTypes";
 
-const standardUsername = getRequiredEnvValue("STANDARD_USERNAME");
-export const globalPassword = getRequiredEnvValue("GLOBAL_PASSWORD");
-
 export const successfulLoginUsers: LoginUserType[] = [
-  { testId: "LOGIN-01", name: "standard user", username: standardUsername },
-  { testId: "LOGIN-02", name: "problem user", username: getRequiredEnvValue("PROBLEM_USERNAME") },
-  { testId: "LOGIN-03", name: "visual user", username: getRequiredEnvValue("VISUAL_USERNAME") },
-  { testId: "LOGIN-04", name: "error user", username: getRequiredEnvValue("ERROR_USERNAME") },
-  { testId: "LOGIN-05", name: "performance glitch user", username: getRequiredEnvValue("PERFORMANCE_GLITCH_USERNAME"), isSlow: true, }
+  { testId: "LOGIN-01", name: "standard user", username: usernames.standard },
+  { testId: "LOGIN-02", name: "problem user", username: usernames.problem },
+  { testId: "LOGIN-03", name: "visual user", username: usernames.visual },
+  { testId: "LOGIN-04", name: "error user", username: usernames.error },
+  { testId: "LOGIN-05", name: "performance glitch user", username: usernames.performanceGlitch, isSlow: true, }
 ];
 
 export const rejectedLoginCases: RejectedLoginCaseType[] = [
   {
     testId: "LOGIN-06",
     name: "locked-out user",
-    username: getRequiredEnvValue("LOCKED_OUT_USERNAME"),
+    username: usernames.lockedOut,
     password: globalPassword,
     errorMessage: "Sorry, this user has been locked out.",
     expectsSessionCookie: true
@@ -25,7 +21,7 @@ export const rejectedLoginCases: RejectedLoginCaseType[] = [
   {
     testId: "LOGIN-07",
     name: "incorrect password",
-    username: standardUsername,
+    username: usernames.standard,
     password: `${globalPassword}_incorrect`,
     errorMessage: "Username and password do not match any user in this service"
   },
@@ -39,7 +35,7 @@ export const rejectedLoginCases: RejectedLoginCaseType[] = [
   {
     testId: "LOGIN-09",
     name: "missing password",
-    username: standardUsername,
+    username: usernames.standard,
     password: "",
     errorMessage: "Password is required"
   }

@@ -1,5 +1,3 @@
-import "dotenv/config";
-
 export const baseURL = process.env.BASE_URL;
 if (!baseURL) {
   throw new Error("BASE_URL is required. Copy .env.example to .env and set the website URL.");

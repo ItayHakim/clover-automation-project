@@ -1,10 +1,14 @@
 import { baseURL } from "../config/routes";
+import { cookieNames } from "../config/cookies";
 import { LoginPage } from "../pages/loginPage";
+import { InventoryPage } from "../pages/inventoryPage";
 import { expect, test } from "@playwright/test";
 
 type BasePageFixtures = {
     pagePath: string;
+    sessionUsername: string;
     loginPage: LoginPage;
+    inventoryPage: InventoryPage;
 };
 
 if (!baseURL) {
@@ -12,8 +16,14 @@ if (!baseURL) {
 }
 export const basePage = test.extend<BasePageFixtures>({
     pagePath: [baseURL, { option: true }],
+    sessionUsername: ["", { option: true }],
 
-    page: async ({ page, pagePath }, use) => {
+    page: async ({ page, pagePath, sessionUsername }, use) => {
+        if (sessionUsername) {
+            await page.context().addCookies([
+                { name: cookieNames.sessionUsername, value: sessionUsername, url: baseURL },
+            ]);
+        }
         await page.goto(pagePath);
         await expect(page).toHaveTitle(/Swag Labs/);
         await use(page);
@@ -21,6 +31,10 @@ export const basePage = test.extend<BasePageFixtures>({
 
     loginPage: async ({ page }, use) => {
         await use(new LoginPage(page));
+    },
+
+    inventoryPage: async ({ page }, use) => {
+        await use(new InventoryPage(page));
     },
 });
 
