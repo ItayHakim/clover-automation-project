@@ -1,3 +1,5 @@
+import { navigationSelectors } from "./navigationSelectors";
+
 export const inventorySelectors = {
   pageTitle: '[data-test="title"]',
   productCards: '[data-test="inventory-item"]',
@@ -6,7 +8,7 @@ export const inventorySelectors = {
   productPrice: '[data-test="inventory-item-price"]',
   productImage: "img",
   sortDropdown: '[data-test="product-sort-container"]',
-  menuButton: "#react-burger-menu-btn",
+  menuButton: navigationSelectors.menuButton,
   logoutLink: "#logout_sidebar_link"
 };
 

@@ -3,6 +3,7 @@ import { inventorySelectors } from "../mapping/inventorySelectors";
 import type { ProductDetailsType, ProductSortOptionType } from "../models/productTypes";
 
 export class InventoryPage {
+  readonly pageTitle: Locator;
   readonly menuButton: Locator;
   readonly logoutLink: Locator;
   readonly productCards: Locator;
@@ -11,6 +12,7 @@ export class InventoryPage {
   readonly sortDropdown: Locator;
 
   constructor(readonly page: Page) {
+    this.pageTitle = page.locator(inventorySelectors.pageTitle);
     this.menuButton = page.locator(inventorySelectors.menuButton);
     this.logoutLink = page.locator(inventorySelectors.logoutLink);
     this.productCards = page.locator(inventorySelectors.productCards);
