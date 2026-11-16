@@ -8,6 +8,7 @@ End-to-end automation tests for the Swag Labs demo shop, built with Playwright T
 | --- | --- |
 | Playwright Test | Browser automation, custom fixtures, assertions, parallel execution, and HTML reporting |
 | TypeScript | Strict type checking for tests, Page Objects, fixtures, and scenario data |
+| Allure Playwright and Allure Report 3 | Collect test results, steps, and attachments and generate an additional report |
 | dotenv | Load the website URL and demo credentials from `.env` |
 | Node.js and npm | Run the project and manage dependencies |
 
@@ -289,7 +290,7 @@ The current settings in `playwright.config.ts` are
 | Test timeout | 30 seconds |
 | Default assertion timeout | 5 seconds |
 | Retries | 2 |
-| Reporter | HTML |
+| Reporters | Playwright HTML and Allure Playwright |
 | Screenshots | On failure |
 | Videos | Retained on failure |
 | Traces | On the first retry |
@@ -303,3 +304,17 @@ npx playwright show-report
 The report is generated in `playwright-report/`. Failure screenshots, retained videos, and retry traces are stored in `test-results/` and linked from the report. Both folders are ignored by Git. A run with retries disabled produces no first-retry trace.
 
 Include the complete generated `playwright-report/` folder with the assignment submission so the reviewer receives the run report and its attachments.
+
+### Allure report
+
+The project dependencies include `allure-playwright` and the Allure Report 3 CLI. Install them with `npm ci` during setup. The CLI runs with Node.js. [Allure Playwright setup](https://allurereport.org/docs/playwright/), [Allure Report 3 installation](https://allurereport.org/docs/v3/install/)
+
+Each test run records Allure results in `test-results/allure-results/`. Playwright cleans this directory with its test output before a new run. Generate and open the report after running the tests.
+
+```powershell
+npm test
+npm run allure:generate
+npm run allure:open
+```
+
+The generated report is stored in `allure-report/`, which Git ignores.

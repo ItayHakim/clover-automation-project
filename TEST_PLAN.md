@@ -10,7 +10,7 @@ The plan uses Playwright with TypeScript and the repository’s Chromium project
 
 ## Coverage Status
 
-The current suite implements nine Login cases. The 21 cases for Products, Cart, Checkout, Logout, and Navigation are planned. Run results belong in the Playwright HTML report.
+The current suite implements nine Login cases. The 21 cases for Products, Cart, Checkout, Logout, and Navigation are planned. Run results belong in the Playwright HTML report and Allure report.
 
 | Area | Spec | Cases | Status | Coverage |
 | --- | --- | --- | --- | --- |
@@ -133,5 +133,7 @@ Sign in for NAV-01 and NAV-02. Start NAV-03 and NAV-04 signed out in a fresh bro
 The assignment run has 27 core cases across the six specs. Implement the planned cases, select the six core Login cases, and set the assignment’s one retry before recording a full run. The current configuration has two retries.
 
 Check the selected cases with `npm test -- --list`. Run the suite with `npm test`, then open the HTML report with `npx playwright show-report` and record the results by test ID.
+
+Generate the Allure report from the same run with `npm run allure:generate`, then view it with `npm run allure:open`.
 
 Flow reference — `Swag_Labs_Automation_Flows.drawio`.
