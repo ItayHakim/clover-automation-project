@@ -1,6 +1,6 @@
 # clover-automation-project
 
-End-to-end automation tests for the Swag Labs demo shop, built with Playwright Test and TypeScript. The current suite covers login, logout, Products, Checkout, and Navigation on Sauce Demo. [Swag Labs](https://www.saucedemo.com/)
+End-to-end automation tests for the Swag Labs demo shop, built with Playwright Test and TypeScript. The current suite covers login, logout, Products, Cart, Checkout, and Navigation on Sauce Demo. [Swag Labs](https://www.saucedemo.com/)
 
 ## Requirements
 
@@ -88,7 +88,7 @@ npm test -- src/test/login.spec.ts --workers=3 --retries=0
 
 ## Current test coverage
 
-The suite currently contains 26 tests, covering nine Login, six Products, five Checkout, four Navigation, and two Logout scenarios.
+The suite currently contains 30 tests, covering nine Login, six Products, four Cart, five Checkout, four Navigation, and two Logout scenarios.
 
 The login suite generates nine independent tests from the scenario data in `src/testdata/loginData.ts`.
 
@@ -116,6 +116,17 @@ The Products suite covers the six scenarios from the diagram's Products page. Ea
 | `PRODUCT-04` | Price (low to high) | Full price list in ascending numeric order |
 | `PRODUCT-05` | Price (high to low) | Full price list in descending numeric order |
 | `PRODUCT-06` | Open Sauce Labs Backpack | Item URL and name, description, and price match its catalog card |
+
+The Cart suite covers the four scenarios from the diagram's Cart page. Each test injects the standard user's session cookie. Add tests start on Inventory, save each product's displayed name and price, click Add to cart, and open Cart. Removal tests seed the required items and open Cart directly, then verify the starting contents and badge before clicking Remove.
+
+| Test ID | Scenario | Expected result |
+| --- | --- | --- |
+| `CART-01` | Add Sauce Labs Backpack | Cart contains only Backpack with the saved name and price, quantity 1, and badge 1 |
+| `CART-02` | Add Backpack and Bike Light | Cart contains exactly both saved products with matching prices, quantity 1 each, and badge 2 |
+| `CART-03` | Remove Backpack from a two-item cart | Only Bike Light remains with the expected price, quantity 1, and badge 1 |
+| `CART-04` | Remove Backpack from a one-item cart | Cart has no item rows and the badge is absent |
+
+Cart scenarios live in `src/testdata/cartData.ts`. Backpack and Bike Light definitions in `src/testdata/productsData.ts` are shared by Cart and Checkout.
 
 The Checkout suite covers the five scenarios from the diagram's Checkout page. Each test injects the standard user's session cookie and seeds `cart-contents` in local storage before opening `/checkout-step-one.html` directly. The completed order uses Backpack and Bike Light; validation and cancellation use Backpack only.
 
@@ -146,8 +157,6 @@ The Navigation suite covers the four scenarios from the diagram's Navigation pag
 | `NAV-04` | Open Cart without a session | Redirect to Login with the Cart-access error, visible login fields and button, and no session cookie |
 
 Navigation route and title assertions stop the test on a mismatch before the next action.
-
-Cart remains an empty placeholder for future coverage.
 
 ## Project structure
 
@@ -189,6 +198,7 @@ clover-automation-project/
 |   |   |-- navigaton.spec.ts
 |   |   `-- products.spec.ts
 |   |-- testdata/
+|   |   |-- cartData.ts
 |   |   |-- checkoutData.ts
 |   |   |-- loginData.ts
 |   |   |-- logoutData.ts
@@ -225,9 +235,9 @@ clover-automation-project/
 
 ## Test setup and timeouts
 
-Tests import `basePage` as `test` from the custom fixture. Before each test uses its page, the fixture navigates to `pagePath` and checks that the browser title contains Swag Labs. Tests can set their initial route with `test.use({ pagePath: urlPaths.login })`. The fixture provides `loginPage`, `inventoryPage`, `productDetailsPage`, `cartPage`, `checkoutPage`, and `navigationPage` instances. Products, Logout, and signed-in Navigation tests set `sessionUsername` to inject the session cookie before navigation, using `test.use({ pagePath: urlPaths.inventory, sessionUsername: usernames.standard })` when starting on Products.
+Tests import `basePage` as `test` from the custom fixture. Before each test uses its page, the fixture navigates to `pagePath` and checks that the browser title contains Swag Labs. Tests can set their initial route with `test.use({ pagePath: urlPaths.login })`. The fixture provides `loginPage`, `inventoryPage`, `productDetailsPage`, `cartPage`, `checkoutPage`, and `navigationPage` instances. Products, Cart, Logout, and signed-in Navigation tests set `sessionUsername` to inject the session cookie before navigation, using `test.use({ pagePath: urlPaths.inventory, sessionUsername: usernames.standard })` when starting on Products.
 
-Checkout sets `cartProductIds` to seed the cart before the first navigation. For example, `[4, 0]` is stored as the JSON array `[4,0]` under `localStorageKeys.cartContents` for the configured website origin. The fixture applies this storage state once per test, so later navigation does not restore items after checkout clears the cart.
+Checkout and Cart removal tests set `cartProductIds` to seed the cart before the first navigation. For example, `[4, 0]` is stored as the JSON array `[4,0]` under `localStorageKeys.cartContents` for the configured website origin. The fixture applies this storage state once per test, so later navigation does not restore removed items.
 
 Each test receives an isolated browser context. `fullyParallel: true` enables parallel execution across and within test files.
 

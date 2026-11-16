@@ -3,6 +3,33 @@ import { urlPaths } from "../config/routes";
 import { cartSelectors } from "../mapping/cartSelectors";
 import type { CartProductType } from "../models/cartTypes";
 import { CartPage } from "../pages/cartPage";
+import { InventoryPage } from "../pages/inventoryPage";
+import { NavigationPage } from "../pages/navigationPage";
+
+export async function addProductsToCart(
+    inventoryPage: InventoryPage,
+    products: CartProductType[],
+): Promise<CartProductType[]> {
+    const expectedProducts: CartProductType[] = [];
+
+    for (const product of products) {
+        const productDetails = await inventoryPage.getProductDetails(product.name);
+        expectedProducts.push({
+            ...product,
+            name: productDetails.name,
+            price: Number(productDetails.price.replace("$", "")),
+        });
+        await inventoryPage.addToCart(product.name);
+    }
+
+    return expectedProducts;
+}
+
+export async function assertCartPage(cartPage: CartPage) {
+    await expect(cartPage.page).toHaveURL(urlPaths.cart);
+    await expect(cartPage.pageTitle).toBeVisible();
+    await expect(cartPage.pageTitle).toHaveText("Your Cart");
+}
 
 export async function assertCartItems(cartItems: Locator, expectedProducts: CartProductType[]) {
     await expect(cartItems).toHaveCount(expectedProducts.length);
@@ -25,7 +52,16 @@ export async function assertCartItems(cartItems: Locator, expectedProducts: Cart
 }
 
 export async function assertCartContents(cartPage: CartPage, expectedProducts: CartProductType[]) {
-    await expect(cartPage.page).toHaveURL(urlPaths.cart);
-    await expect(cartPage.pageTitle).toHaveText("Your Cart");
+    await assertCartPage(cartPage);
     await assertCartItems(cartPage.cartItems, expectedProducts);
+}
+
+export async function assertCartBadge(navigationPage: NavigationPage, expectedCount: number) {
+    if (expectedCount === 0) {
+        await expect(navigationPage.cartBadge).toHaveCount(0);
+        return;
+    }
+
+    await expect(navigationPage.cartBadge).toBeVisible();
+    await expect(navigationPage.cartBadge).toHaveText(String(expectedCount));
 }
