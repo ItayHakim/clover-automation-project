@@ -186,9 +186,9 @@ The HTTP check uses Playwright's `request` fixture to verify the website's respo
 | Test ID | Scenario | Expected result |
 | --- | --- | --- |
 | `HTTP-01` | Request the website without a browser | Successful HTTP response containing the Swag Labs application HTML |
-| `VISUAL-01` | Compare the login form | The rendered form matches the reviewed Windows Chromium baseline |
+| `VISUAL-01` | Compare the login form | The rendered form matches the reviewed Chromium baseline for the current operating system |
 
-The screenshot baseline lives in `src/test/visual.spec.ts-snapshots/` and targets local Windows Chromium runs. When running on another operating system, generate and inspect that platform's baseline before committing it. Review intentional UI changes before updating an existing baseline. [Playwright visual comparisons](https://playwright.dev/docs/test-snapshots)
+The screenshot baselines live in `src/test/visual.spec.ts-snapshots/`. Playwright selects `login-form-chromium-win32.png` for local Windows runs and `login-form-chromium-linux.png` for Ubuntu CI runs. The Linux baseline was captured and visually reviewed from the GitHub Actions report for run `44064208467`. Separate baselines account for differences in font rendering between operating systems. When adding another operating system or updating an existing baseline, generate it in the target environment and inspect the image before committing it. [Playwright visual comparisons](https://playwright.dev/docs/test-snapshots)
 
 ```powershell
 npm test -- src/test/visual.spec.ts --update-snapshots
