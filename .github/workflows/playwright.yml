@@ -19,7 +19,7 @@ jobs:
     - name: Configure test environment
       run: cp .env.example .env
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx playwright test --workers=12
     - uses: actions/upload-artifact@v7
       if: ${{ !cancelled() }}
       with:
